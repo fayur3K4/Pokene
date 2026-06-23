@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking POTOKENE</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* TONE WARNA: Charcoal Dark & Lime Green */
+        :root {
+            --bg-primary: #141714;
+            --bg-secondary: #1f241f;
+            --accent-color: #cbfc21; 
+            --accent-hover: #b3e317;
+            --text-main: #ffffff;
+            --text-muted: #9ba69f;
+            --border-color: #2f3832;
+            --card-shadow: 0 8px 24px rgba(0,0,0,0.6);
+            --input-bg: #272e29;
+            --error-color: #ff5252;
+            --success-color: #4caf50;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-primary); color: var(--text-main); padding: 40px 20px; display: flex; justify-content: center; min-height: 100vh; }
+        .container { max-width: 1000px; width: 100%; }
+
+        /* HEADER DI FRONT END (Logo disesuaikan tidak bulat) */
+        header { text-align: center; margin-bottom: 35px; display: flex; flex-direction: row; align-items: center; gap: 20px; justify-content: center;}
+        .logo-img { width: 100%; max-width: 180px; height: auto; object-fit: contain; flex-shrink: 0;}
+        .logo-info { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; text-align: left;}
+        .logo-text { font-size: 2.2rem; font-weight: 700; letter-spacing: 1px; margin-top: 0; display: none; /* Disembunyikan karena sudah ada di logo gambar */ }
+        .logo-info p { color: var(--accent-color); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 5px;}
+        .contact-info { display: flex; flex-direction: column; gap: 5px; font-size: 0.9rem;}
+        .map-link, .wa-link { color: var(--text-main); text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: bold; }
+        .map-link svg, .wa-link svg { color: var(--accent-color); flex-shrink: 0;}
+        .map-link:hover, .wa-link:hover { color: var(--accent-color); }
+        
+        @media (max-width: 600px) {
+            header { flex-direction: column; text-align: center; }
+            .logo-info { align-items: center; text-align: center; }
+        }
+
+        .step-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
+        .step3-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; } 
+        
+        /* FIX HP OVERLAP: Nonaktifkan sticky di layar HP */
+        .summary-sidebar { position: sticky; top: 40px; align-self: start; }
+        @media (max-width: 800px) { 
+            .step-layout, .step3-layout { grid-template-columns: 1fr; } 
+            .summary-sidebar { position: static; } 
+        }
+
+        .card { background-color: var(--bg-secondary); border-radius: 12px; padding: 30px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow); margin-bottom: 25px; }
+        .card h2 { font-size: 1.3rem; margin-bottom: 20px; border-left: 4px solid var(--accent-color); padding-left: 10px; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; }
+
+        .form-control { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        .form-control label { font-size: 0.9rem; color: var(--text-muted); }
+        input[type="text"], input[type="email"], textarea { background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; color: var(--text-main); font-size: 1rem; outline: none; transition: border 0.3s; width: 100%; }
+        textarea { resize: vertical; min-height: 80px; }
+        input:focus, textarea:focus { border-color: var(--accent-color); }
+
+        .phone-input-wrapper { display: flex; align-items: center; background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; transition: border 0.3s; }
+        .phone-input-wrapper:focus-within { border-color: var(--accent-color); }
+        .phone-prefix { padding: 12px 10px 12px 12px; color: var(--text-main); font-weight: bold; background-color: rgba(255,255,255,0.05); border-right: 1px solid var(--border-color); }
+        .phone-input-wrapper input { border: none; background: transparent; border-radius: 0; outline: none; width: 100%; padding: 12px; color: var(--text-main); font-size: 1rem; }
+
+        .date-wrapper { position: relative; width: 100%; cursor: pointer; }
+        #fakeDate { cursor: pointer; position: relative; z-index: 1; }
+        #bookingDate { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 3; }
+        #bookingDate:disabled { cursor: not-allowed; }
+
+        /* GRID JADWAL 3 KOLOM KONSUMEN */
+        .slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        
+        .slot-btn { background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 12px 5px; border-radius: 6px; cursor: pointer; text-align: center; font-size: 0.85rem; transition: all 0.2s ease; font-weight: bold;}
+        .slot-btn:hover:not(:disabled) { border-color: var(--accent-color); }
+        .slot-btn.active { background-color: var(--accent-color); color: #000; border-color: var(--accent-color); }
+        .slot-btn:disabled { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
+        .loading-text { font-size: 0.85rem; color: var(--accent-color); margin-top: 8px; font-weight: 500; }
+
+        .btn-primary { background-color: var(--accent-color); color: #000; border: none; width: 100%; padding: 15px; border-radius: 8px; font-size: 1.1rem; font-weight: 800; cursor: pointer; transition: background-color 0.2s; margin-top: 20px; }
+        .btn-primary:hover { background-color: var(--accent-hover); }
+        .btn-primary:disabled { background-color: #444; cursor: not-allowed; color: #888; }
+        
+        .btn-download { background-color: #222; color: white; border: 1px solid #444; padding: 12px 15px; border-radius: 6px; font-size: 0.95rem; cursor: pointer; font-weight: bold; margin-top: 15px; width: 100%; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;}
+        .btn-download:hover { background-color: #444; }
+
+        .btn-back { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.9rem; text-decoration: underline; display: inline-block; margin-bottom: 15px;}
+
+        .item-table { width: 100%; border-collapse: collapse; }
+        .item-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
+        .checkbox-container { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .checkbox-container input[type="radio"], .checkbox-container input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent-color); cursor: pointer; }
+        .qty-input { width: 50px; padding: 6px; text-align: center; background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 4px;}
+        .qty-input:disabled { opacity: 0.3; cursor: not-allowed; border-style: dashed; }
+
+        .summary-details { margin-bottom: 20px; border-bottom: 1px dashed var(--border-color); padding-bottom: 15px; }
+        .summary-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.95rem; }
+        .summary-row.item-line { font-size: 0.85rem; color: var(--text-muted); padding-left: 10px; }
+        .summary-total { display: flex; justify-content: space-between; align-items: center; font-size: 1.3rem; font-weight: bold; color: var(--accent-color); margin-top: 15px; margin-bottom: 25px; }
+        
+        /* INVOICE DESIGN */
+        .receipt-wrapper { background-color: #f7f9f7; color: #111; max-width: 500px; margin: 0 auto 20px auto; border-radius: 8px; padding: 30px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .receipt-wrapper::after { content: ""; position: absolute; bottom: -10px; left: 0; right: 0; height: 10px; background-size: 20px 20px; background-image: radial-gradient(circle at 10px 10px, transparent 12px, #f7f9f7 13px); }
+        .r-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.9rem; }
+        .r-bold { font-weight: bold; }
+        .r-divider { border-top: 1px dashed #ccc; margin: 15px 0; }
+        .receipt-section-title { font-size: 1rem; font-weight: bold; color: #111; margin-top: 15px; margin-bottom: 10px; }
+        
+        /* CSS INVOICE DI FRONT END (Mengikuti Update Back End) */
+        .receipt-top { text-align: center; margin-bottom: 20px; border-bottom: 2px dashed #ccc; padding-bottom: 15px; }
+        .invoice-logo { width: 100%; max-width: 200px; height: auto; object-fit: contain; margin: 0 auto 10px auto; display: block; }
+        .invoice-address { font-size: 0.85rem; color: #333; line-height: 1.4; }
+        .invoice-address p { margin-bottom: 2px; font-weight: bold;}
+        .invoice-id-center { font-size: 1.15rem; font-weight: 800; color: #111; margin-top: 15px; letter-spacing: 1px; text-align: center;}
+        
+        /* PAYMENT STYLING */
+        .payment-options { background: #eaecea; padding: 15px; border-radius: 6px; margin-top: 20px; color: #111;}
+        .pay-radio { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd; cursor: pointer; }
+        .pay-radio:last-child { border-bottom: none; }
+        .pay-radio input { accent-color: #000; transform: scale(1.2); margin-right: 10px; }
+        .pay-radio div { display: flex; align-items: center; font-weight: 600; }
+
+        /* QRIS DESIGN */
+        .qris-box { background: white; border: 2px solid #ccc; border-radius: 8px; padding: 15px; text-align: center; margin-top: 15px; color: black; }
+        .qris-image-wrapper { background: #f0f0f0; width: 220px; height: 220px; margin: 0 auto; display: flex; align-items: center; justify-content: center; border-radius: 6px; overflow: hidden; border: 1px solid #ddd; }
+        .qris-image-wrapper img { width: 100%; height: 100%; object-fit: contain; }
+        .dp-input-field { width: 100%; padding: 10px; font-size: 1.1rem; font-weight: bold; text-align: center; border: 2px solid #000; border-radius: 6px; background: #fff; color: #000; margin-top: 5px;}
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header id="mainHeader">
+        <img src="https://plain-apac-prod-public.komododecks.com/202606/20/zbHRMBV2QC6K6nFHI5ld/image.png" alt="Logo Potokene" class="logo-img">
+        <div class="logo-info">
+            <p>Self Photo Studio Pare</p>
+            <div class="contact-info">
+                <a href="https://maps.app.goo.gl/YSiphY7Po1HTE1PM9" target="_blank" class="map-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
+                    Maps Studio
+                </a>
+                <a href="https://wa.me/6281338380100" target="_blank" class="wa-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.948h.083c4.368 0 7.928-3.558 7.929-7.926a7.883 7.883 0 0 0-2.331-5.674zm-3.36 10.399a.66.66 0 0 1-.264.137c-.12.032-.24.032-.36.032-.12 0-.24-.016-.36-.048l-.071-.02-.132-.036a.664.664 0 0 1-.228-.097.662.662 0 0 1-.168-.141l-.039-.039a.662.662 0 0 1-.132-.168.66.66 0 0 1-.115-.22l-.012-.035-.01-.031a.66.66 0 0 1-.033-.36c0-.12 0-.24.017-.36.012-.12.028-.24.045-.36.02-.12.037-.24.053-.36l.036-.201a.66.66 0 0 1 .132-.264.66.66 0 0 1 .168-.168.66.66 0 0 1 .228-.132l.024-.01a.66.66 0 0 1 .36-.049c.12 0 .24 0 .36.012.12.012.24.024.36.037.12.016.24.032.36.049h.036c.12 0 .24-.001.36-.016.12-.016.24-.032.36-.048.12-.017.24-.033.36-.049h.016a.66.66 0 0 1 .264.132.66.66 0 0 1 .168.168.66.66 0 0 1 .132.228l.008.016a.66.66 0 0 1 .041.36c.004.12 0 .24 0 .36.004.12 0 .24 0 .36l.004.22c.004.12 0 .24 0 .36-.004.12 0 .24 0 .36.004.12.012.24.02.36l.004.22a.663.663 0 0 0 .115.22c.036.072.08.132.132.18l.028.024a.663.663 0 0 0 .228.112.66.66 0 0 0 .36.02c.12-.008.24-.016.36-.024l.112-.008c.12-.004.24-.004.36-.004.12 0 .24-.004.36-.008h.036a.664.664 0 0 0 .264-.132.663.663 0 0 0 .168-.168.66.66 0 0 0 .132-.228.663.663 0 0 0 .04-.36c.004-.12 0-.24.004-.36-.004-.12-.008-.24-.012-.36l-.004-.22a.663.663 0 0 0-.115-.22zm-6.2 8.76a.66.66 0 0 0 .264-.132.662.662 0 0 0 .168-.168.66.66 0 0 0 .132-.228.663.663 0 0 0 .041-.36c.004-.12 0-.24.004-.36.004-.12.008-.24.012-.36l.004-.22a.663.663 0 0 0-.115-.22.66.66 0 0 0-.168-.168.662.662 0 0 0-.228-.112.66.66 0 0 0-.36-.036.66.66 0 0 0-.36.036.66.66 0 0 0-.228.112.66.66 0 0 0-.168.168.663.663 0 0 0-.132.228l-.004.012a.663.663 0 0 0-.04.36c-.004.12 0 .24-.004.36-.004.12-.012.24-.02.36l-.004.22a.663.663 0 0 0 .115.22zm.44-7.16c-.12-.012-.24-.024-.36-.036-.12-.012-.24-.024-.36-.036a.66.66 0 0 0-.228.096.66.66 0 0 0-.168.14l-.012.012a.662.662 0 0 0-.132.168.66.66 0 0 0-.115.22c-.004.12 0 .24 0 .36.004.12 0 .24 0 .36l.004.22c.004.12 0 .24 0 .36-.004.12 0 .24 0 .36.004.12.012.24.02.36l.004.22a.662.662 0 0 0 .115.22.663.663 0 0 0 .168.168l.02.016a.66.66 0 0 0 .228.112.66.66 0 0 0 .36.036.66.66 0 0 0 .36-.036l.016-.016a.66.66 0 0 0 .168-.168zm6.6-.84c-.12-.016-.24-.032-.36-.048-.12-.016-.24-.032-.36-.048a.66.66 0 0 0-.228.096.663.663 0 0 0-.168.14l-.012.012a.662.662 0 0 0-.132.168.66.66 0 0 0-.115.22c-.004.12 0 .24.004.36.004.12.008.24.012.36l.008.22c.004.12.012.24.02.36.008.12.016.24.024.36l.012.232a.662.662 0 0 0 .115.22.663.663 0 0 0 .168.168l.02.016a.66.66 0 0 0 .228.112.66.66 0 0 0 .36.036.66.66 0 0 0 .36-.036l.016-.016a.66.66 0 0 0 .168-.168z"/></svg>
+                    WA Admin
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div id="step1">
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <h2>Pilih Jadwal Foto Kamu</h2>
+            <div class="form-control">
+                <div class="date-wrapper" id="dateInputWrapper" onclick="try{document.getElementById('bookingDate').showPicker()}catch(e){}">
+                    <input type="text" id="fakeDate" placeholder="Tanggal Booking" readonly>
+                    <input type="date" id="bookingDate" onchange="handleDateChange()" disabled>
+                </div>
+                <div id="loadingSlots" class="loading-text">Menghubungkan ke jadwal server...</div>
+            </div>
+            <div id="timeSelectionArea" class="hidden">
+                <h2 style="margin-top: 30px; border-left: none; padding-left: 0;">Pilih Sesi Jam</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: -15px; margin-bottom: 15px;">*Hanya bisa pilih 1 sesi waktu (Durasi 15 Menit)</p>
+                <div class="slots-grid" id="slotsContainer"></div>
+            </div>
+            <button class="btn-primary" id="btnNext" onclick="goToStep2()" disabled>Selanjutnya</button>
+        </div>
+    </div>
+
+    <div id="step2" class="hidden">
+        <div class="step-layout">
+            <div class="main-form">
+                <div class="card">
+                    <h2>Informasi Pemesan <button class="btn-back" onclick="goToStep1()" style="margin-bottom:0; display:inline;">← Ubah Jadwal</button></h2>
+                    <div class="form-group">
+                        <div class="form-control"><label>Nama Lengkap *</label><input type="text" id="custName" required></div>
+                        <div class="form-control"><label>Email *</label><input type="email" id="custEmail" required></div>
+                        <div class="form-control">
+                            <label>Nomor HP / WA *</label>
+                            <div class="phone-input-wrapper">
+                                <span class="phone-prefix">+62</span>
+                                <input type="tel" id="custPhone" placeholder="8123456789" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                            </div>
+                        </div>
+                        <div class="form-control"><label>Pesan Tambahan (Opsional)</label><textarea id="custMessage"></textarea></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>Pilih Paket Utama</h2>
+                    <table class="item-table" id="paketTable"><tbody></tbody></table>
+                </div>
+                <div class="card">
+                    <h2>Pilih Ekstra (Add-On)</h2>
+                    <table class="item-table" id="addonTable"><tbody></tbody></table>
+                </div>
+            </div>
+            <div class="summary-sidebar">
+                <div class="card">
+                    <h2>Rincian Sementara</h2>
+                    <div class="summary-details">
+                        <div class="summary-row"><span>Tanggal:</span><span id="sumDate" style="font-weight:bold;">-</span></div>
+                        <div class="summary-row"><span>Sesi Waktu:</span><span id="sumSlots" style="color:var(--accent-color); font-weight:bold;">-</span></div>
+                    </div>
+                    <div class="summary-details" id="sumItemsContainer"></div>
+                    <div class="summary-total"><span>Total:</span><span id="grandTotalDisplay">Rp 0</span></div>
+                    <button class="btn-primary" onclick="goToStep3()" style="margin-top: 0;">Lanjut ke Pembayaran</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="step3" class="hidden">
+        <button class="btn-back" onclick="goToStep2()">← Kembali Edit Pesanan</button>
+        
+        <div class="step3-layout">
+            <div class="summary-sidebar">
+                <div class="card">
+                    <h2>Rincian Pesanan Kamu</h2>
+                    <div class="summary-details">
+                        <div class="summary-row"><span>Tanggal:</span><span id="sumDatePay" style="font-weight:bold;">-</span></div>
+                        <div class="summary-row"><span>Sesi Waktu:</span><span id="sumSlotsPay" style="color:var(--accent-color); font-weight:bold;">-</span></div>
+                    </div>
+                    <div class="summary-details" id="sumItemsContainerPay"></div>
+                    <div class="summary-total"><span>Total:</span><span id="grandTotalDisplayPay">Rp 0</span></div>
+                </div>
+            </div>
+
+            <div class="main-form">
+                <div class="card" style="margin-bottom: 0;">
+                    <h2 style="color:var(--accent-color); border:none; justify-content:center; margin-bottom: 5px;">Pilih Metode Pembayaran</h2>
+                    <div class="payment-options">
+                        <label class="pay-radio"><div><input type="radio" name="payType" value="DP Bebas" checked onchange="handlePaymentMethodChange()"> Bayar DP Bebas via QRIS</div></label>
+                        <label class="pay-radio"><div><input type="radio" name="payType" value="Pelunasan QRIS" onchange="handlePaymentMethodChange()"> Lunas via QRIS (100%)</div></label>
+                        <label class="pay-radio"><div><input type="radio" name="payType" value="Bayar di Tempat" onchange="handlePaymentMethodChange()"> Bayar Cash di Kasir Studio</div></label>
+                    </div>
+
+                    <div id="customDpWrapper" style="margin-top: 20px; background:#fff; padding:15px; border-radius:8px;">
+                        <label style="font-size: 0.9rem; font-weight: bold; color:#111;">Tentukan Nominal DP Kamu (Rp):</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="number" id="customDpAmount" class="dp-input-field" value="25000" min="1">
+                            <button class="btn-primary" style="margin-top: 5px; padding: 0 20px; width: auto;" onclick="generateQrisClick()">Buka QRIS</button>
+                        </div>
+                    </div>
+
+                    <div id="uploadResiWrapper" class="hidden" style="margin-top: 15px; background:#fff; padding:15px; border-radius:8px;">
+                        <label style="font-size: 0.9rem; font-weight: bold; color:#111;">Upload Bukti Transfer (Maks 2MB):</label>
+                        <input type="file" id="buktiTransfer" accept="image/*" style="width: 100%; margin-top: 8px; color:#111; border: 1px solid #ccc; padding: 5px; border-radius: 4px;">
+                    </div>
+
+                    <div id="qrisContainer" class="qris-box hidden">
+                        <div style="font-weight: 800; font-size: 1.1rem;">QRIS LIVIN MERCHANT</div>
+                        <div style="font-size: 0.75rem; color: #666; font-weight: bold; margin-bottom: 10px;">POTOKENE SELF PHOTO STUDIO</div>
+                        <div id="qrisResultArea" class="hidden">
+                            <div class="qris-image-wrapper"><img id="qrisImg" src="qris.jpg" alt="Scan QRIS Potokene"></div>
+                            <div style="font-size: 1.3rem; font-weight: 800; margin-top: 10px;" id="qrisDisplayAmount">Rp 0</div>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" id="btnFinalSubmit" onclick="submitFinalDanPreviewInvoice()" style="margin-top:25px;">Selesaikan & Preview Invoice</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="step4" class="hidden">
+        <div class="receipt-wrapper" id="invoiceArea">
+            <div class="receipt-top">
+                <img src="https://plain-apac-prod-public.komododecks.com/202606/20/zbHRMBV2QC6K6nFHI5ld/image.png" alt="Logo Potokene" class="invoice-logo">
+                <div class="invoice-address">
+                    <p>Jl. Kemuning 9A, Pare, Kampung Inggris</p>
+                    <p>WA: 6281338380100</p>
+                    <p>IG: potokene.id</p>
+                </div>
+                <div class="invoice-id-center" id="invTrxId"></div>
+            </div>
+            
+            <div class="receipt-body">
+                <div class="r-row"><span class="r-bold">Nama:</span> <span id="invName"></span></div>
+                <div class="r-row"><span class="r-bold">No. HP:</span> <span id="invPhone"></span></div>
+                <div class="r-divider"></div>
+                <div class="r-row"><span class="r-bold">Tgl Booking:</span> <span id="invBookDate"></span></div>
+                <div class="r-row"><span class="r-bold">Sesi Waktu:</span> <span id="invSlots" style="color: #444; font-weight: bold; text-align: right;"></span></div>
+                <div class="r-divider"></div>
+                
+                <div id="invPaketSection"><div class="receipt-section-title">Item Paket:</div><div id="invPaketArea"></div></div>
+                <div id="invAddonSection" class="hidden"><div class="receipt-section-title">Ekstra (Add-On):</div><div id="invAddonArea"></div></div>
+
+                <div class="r-divider"></div>
+                <div class="r-row"><span class="r-bold" style="font-size:1.1rem;">TOTAL TAGIHAN</span><span id="invGrandTotal" style="font-size:1.1rem; font-weight:bold;"></span></div>
+                <div class="r-row" style="color: green; margin-top:5px;"><span class="r-bold" id="labelMetodeBayar"></span><span id="invDpAmount" style="font-weight:bold;"></span></div>
+            </div>
+        </div>
+
+        <div style="max-width: 500px; margin: 0 auto;">
+            <button class="btn-download" id="btnDownload" onclick="downloadInvoiceGambar()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+                Download Gambar Invoice
+            </button>
+            <p style="font-size:0.8rem; text-align:center; color:var(--text-muted); margin-top:8px; margin-bottom:20px;">*Wajib disave untuk bukti ke studio nanti.</p>
+            
+            <button class="btn-primary" id="btnWhatsApp" onclick="bukaWhatsAppDanMintaResi()">Konfirmasi & Kirim WA Admin</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // URL SAKTI APPS SCRIPT
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxh2gwKPwfP-j7D594-S2RTf7HKtzYXefllanC6P55IJbUSS-Kv_o8BBwaoUlxZoO0/exec'; 
+
+    const timeSlots = ["10.00","10.30","11.00","11.30","12.00","12.30","13.00","13.30","14.00","14.30","15.00","15.30","16.00","16.30","17.00","17.30","18.00","18.30","19.00","19.30","20.00"];
+    const daftarPaket = [{id:"p1",name:"Solo / Squad",price:50000},{id:"p2",name:"Mid Circle",price:90000},{id:"p3",name:"Party Group",price:125000},{id:"p4",name:"Pas Foto",price:35000},{id:"p5",name:"Couple Blue",price:120000}];
+    const daftarAddon = [{id:"a1",name:"SPOTLIGHT",price:25000},{id:"a2",name:"PERSONIL",price:15000},{id:"a3",name:"DURASI (5 MNT)",price:10000},{id:"a4",name:"CETAK 4R",price:10000},{id:"a5",name:"COSTUME ANIMAL",price:10000},{id:"a6",name:"PENGARAH GAYA",price:20000},{id:"a7",name:"KEYCHAIN",price:10000},{id:"a9",name:"PIGURA 10RS",price:70000},{id:"a10",name:"PIGURA 4R",price:25000}];
+
+    let selectedDate = "", selectedSlotsArray = [], currentGrandTotal = 0;
+    let globalBookedData = {}; let currentTrxId = ""; 
+    let base64File = ""; let mimeType = ""; // Variabel penampung gambar
+
+    // Event listener untuk membaca upload file resi
+    document.addEventListener("DOMContentLoaded", () => {
+        const inputBukti = document.getElementById('buktiTransfer');
+        if (inputBukti) {
+            inputBukti.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    if (file.size > 2 * 1024 * 1024) { // Limit 2MB
+                        alert("Ukuran file terlalu besar! Maksimal 2MB ya kak.");
+                        this.value = "";
+                        base64File = ""; mimeType = "";
+                        return;
+                    }
+                    mimeType = file.type;
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        base64File = event.target.result.split(',')[1]; 
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    base64File = ""; mimeType = "";
+                }
+            });
+        }
+    });
+
+    function formatRupiah(a){ return "Rp "+parseInt(a).toLocaleString('id-ID'); }
+
+    function generateTrxId() {
+        const d = new Date();
+        const yy = String(d.getFullYear()).slice(-2);
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase();
+        return `PTK-${yy}${mm}${dd}-${randomStr}`;
+    }
+
+    function formatTanggalIndo(dateStr) {
+        const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+        const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        const d = new Date(dateStr);
+        return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    }
+
+    function fetchBookedSlots() {
+        const loader = document.getElementById("loadingSlots");
+        const bDate = document.getElementById("bookingDate");
+        const bWrapper = document.getElementById("dateInputWrapper");
+
+        loader.classList.remove("hidden");
+        bDate.disabled = true; bWrapper.style.opacity = "0.4"; bWrapper.style.pointerEvents = "none";
+        
+        fetch(SCRIPT_URL + "?t=" + new Date().getTime())
+        .then(res => res.json())
+        .then(data => {
+            globalBookedData = data;
+            loader.classList.add("hidden");
+            bDate.disabled = false; bWrapper.style.opacity = "1"; bWrapper.style.pointerEvents = "auto";
+            if(selectedDate) renderSlots(selectedDate, selectedDate);
+        })
+        .catch(() => {
+            loader.innerText = "⚠️ Gagal memuat jadwal harian server.";
+            loader.style.color = "var(--error-color)";
+        });
+    }
+
+    function handleDateChange(){
+        selectedDate = document.getElementById("bookingDate").value;
+        if(selectedDate){
+            document.getElementById("fakeDate").value = formatTanggalIndo(selectedDate);
+            document.getElementById("timeSelectionArea").classList.remove("hidden");
+            renderSlots(selectedDate, selectedDate);
+        } else {
+            document.getElementById("timeSelectionArea").classList.add("hidden");
+            document.getElementById("fakeDate").value = "";
+            document.getElementById("btnNext").disabled = true;
+        }
+    }
+
+    function renderSlots(dStr, keyTanggal){
+        const container = document.getElementById("slotsContainer");
+        container.innerHTML = ""; selectedSlotsArray = [];
+        document.getElementById("btnNext").disabled = true;
+        
+        const now = new Date(), sel = new Date(dStr), isToday = sel.toDateString() === now.toDateString();
+        let lakuDiTanggalIni = globalBookedData[keyTanggal] || {};
+
+        timeSlots.forEach(s => {
+            let [h, m] = s.split('.').map(Number);
+            let jamAkhir = h, menitAkhir = m + 15;
+            if(menitAkhir >= 60) { jamAkhir += 1; menitAkhir -= 60; }
+            const fullTextSlot = `${s} - ${String(jamAkhir).padStart(2, '0')}.${String(menitAkhir).padStart(2, '0')}`; 
+            
+            const btn = document.createElement("button");
+            btn.className = "slot-btn"; btn.innerText = s;
+            
+            let isPast = isToday && (h < now.getHours() || (h === now.getHours() && m <= now.getMinutes()));
+            let isAlreadyBooked = lakuDiTanggalIni[fullTextSlot] !== undefined;
+
+            if(isPast || isAlreadyBooked) {
+                btn.disabled = true; 
+                if(isAlreadyBooked && lakuDiTanggalIni[fullTextSlot].status === "BLOKIR") {
+                    btn.innerText = "TUTUP";
+                    btn.style.color = "#ff5252";
+                }
+            } else {
+                btn.onclick = () => {
+                    if(selectedSlotsArray.includes(fullTextSlot)){ 
+                        selectedSlotsArray = []; btn.classList.remove("active"); 
+                    } else { 
+                        document.querySelectorAll('.slot-btn.active').forEach(el => el.classList.remove('active'));
+                        selectedSlotsArray = [fullTextSlot]; btn.classList.add("active"); 
+                    }
+                    document.getElementById("btnNext").disabled = selectedSlotsArray.length === 0;
+                };
+            }
+            container.appendChild(btn);
+        });
+    }
+
+    function goToStep1(){ hideSteps(); document.getElementById("step1").classList.remove("hidden"); }
+    function goToStep2(){ 
+        hideSteps(); document.getElementById("step2").classList.remove("hidden");
+        document.getElementById("sumDate").innerText = formatTanggalIndo(selectedDate);
+        
+        // Memisahkan sesi jam agar hanya mengambil bagian jam (misal 10.00)
+        let jamAwals = selectedSlotsArray.map(slot => slot.split(" - ")[0]);
+        document.getElementById("sumSlots").innerHTML = jamAwals.join(", ");
+        
+        updateSummary(); window.scrollTo(0,0);
+    }
+
+    function goToStep3(){
+        if(!document.getElementById("custName").value || !document.getElementById("custPhone").value){ 
+            alert("Isi nama dan nomer WA dulu bro!"); return; 
+        }
+        let adaPaket = document.querySelector('input[name="paketUtama"]:checked');
+        if(!adaPaket){ alert(`Silakan pilih salah satu Paket Utama studio dulu kak!`); return; }
+
+        currentTrxId = generateTrxId();
+        hideSteps(); document.getElementById("step3").classList.remove("hidden");
+
+        document.getElementById("sumDatePay").innerText = document.getElementById("sumDate").innerText;
+        document.getElementById("sumSlotsPay").innerHTML = document.getElementById("sumSlots").innerHTML;
+        document.getElementById("sumItemsContainerPay").innerHTML = document.getElementById("sumItemsContainer").innerHTML;
+        document.getElementById("grandTotalDisplayPay").innerText = document.getElementById("grandTotalDisplay").innerText;
+
+        handlePaymentMethodChange(); window.scrollTo(0,0);
+    }
+
+    function handlePaymentMethodChange() {
+        const payType = document.querySelector('input[name="payType"]:checked').value;
+        const qrisBox = document.getElementById("qrisContainer");
+        const qrisResult = document.getElementById("qrisResultArea");
+        const dpWrapper = document.getElementById("customDpWrapper");
+        const uploadWrapper = document.getElementById("uploadResiWrapper");
+
+        if (payType === "Bayar di Tempat") {
+            qrisBox.classList.add("hidden"); qrisResult.classList.add("hidden");
+            dpWrapper.classList.add("hidden");
+            uploadWrapper.classList.add("hidden");
+        } else if (payType === "Pelunasan QRIS") {
+            qrisBox.classList.remove("hidden"); qrisResult.classList.remove("hidden"); 
+            dpWrapper.classList.add("hidden");
+            uploadWrapper.classList.remove("hidden");
+            document.getElementById("qrisDisplayAmount").innerText = formatRupiah(currentGrandTotal);
+            document.getElementById("qrisImg").src = "qris.jpg";
+        } else if (payType === "DP Bebas") {
+            qrisBox.classList.remove("hidden"); qrisResult.classList.add("hidden"); 
+            dpWrapper.classList.remove("hidden");
+            uploadWrapper.classList.remove("hidden");
+        }
+    }
+
+    function generateQrisClick() {
+        let nominalDP = parseInt(document.getElementById("customDpAmount").value) || 0;
+        if(nominalDP < 1) { alert("Ketik nominal uangnya dulu kak!"); return; }
+        document.getElementById("qrisResultArea").classList.remove("hidden");
+        document.getElementById("qrisDisplayAmount").innerText = formatRupiah(nominalDP);
+        document.getElementById("qrisImg").src = "qris.jpg";
+    }
+
+    function updateSummary(isInvoice = false){
+        currentGrandTotal = 0; let paketOrderHTML = ""; let addonOrderHTML = "";
+        let sidebarPaketHTML = ""; let sidebarAddonHTML = "";
+
+        daftarPaket.forEach(item => {
+            const chk = document.getElementById(`chk_pkt_${item.id}`).checked;
+            if(chk){
+                currentGrandTotal += item.price;
+                sidebarPaketHTML += `<div class="summary-row item-line"><span>• ${item.name}</span><span>${formatRupiah(item.price)}</span></div>`;
+                paketOrderHTML += `<div class="r-row"><span>1x ${item.name}</span> <span>${formatRupiah(item.price)}</span></div>`;
+            }
+        });
+
+        daftarAddon.forEach(item => {
+            const chk = document.getElementById(`chk_add_${item.id}`).checked;
+            const qty = parseInt(document.getElementById(`qty_add_${item.id}`).value) || 1;
+            if(chk){
+                const tot = item.price * qty; currentGrandTotal += tot;
+                sidebarAddonHTML += `<div class="summary-row item-line"><span>• ${item.name} (x${qty})</span><span>${formatRupiah(tot)}</span></div>`;
+                addonOrderHTML += `<div class="r-row"><span>${qty}x ${item.name}</span> <span>${formatRupiah(tot)}</span></div>`;
+            }
+        });
+        
+        if(!isInvoice){
+            let finalSidebar = "";
+            if(sidebarPaketHTML) finalSidebar += `<div style="font-size:0.85rem; font-weight:bold; color:var(--accent-color); margin-bottom:4px; margin-top:5px;">Paket Utama:</div>` + sidebarPaketHTML;
+            if(sidebarAddonHTML) finalSidebar += `<div style="font-size:0.85rem; font-weight:bold; color:var(--accent-color); margin-top:12px; margin-bottom:4px;">Ekstra (Add-On):</div>` + sidebarAddonHTML;
+            document.getElementById("sumItemsContainer").innerHTML = finalSidebar || "<p style='text-align:center;font-size:0.8rem'>Belum ada item</p>";
+            document.getElementById("grandTotalDisplay").innerText = formatRupiah(currentGrandTotal);
+            document.getElementById("sumItemsContainerPay").innerHTML = finalSidebar || "<p style='text-align:center;font-size:0.8rem'>Belum ada item</p>";
+            document.getElementById("grandTotalDisplayPay").innerText = formatRupiah(currentGrandTotal);
+        } else {
+            document.getElementById("invPaketArea").innerHTML = paketOrderHTML;
+            document.getElementById("invAddonArea").innerHTML = addonOrderHTML;
+            document.getElementById("invAddonSection").classList.toggle("hidden", addonOrderHTML === "");
+        }
+    }
+
+    function submitFinalDanPreviewInvoice(){
+        const btnSubmit = document.querySelector("#btnFinalSubmit");
+        btnSubmit.disabled = true; 
+        btnSubmit.innerText = "⏳ Sedang Menyimpan Data...";
+
+        const payMethodSelected = document.querySelector('input[name="payType"]:checked').value;
+        let labelMetodePembayaranFinal = payMethodSelected;
+        if(payMethodSelected === "DP Bebas") {
+            let nilaiDPAngka = document.getElementById("customDpAmount").value;
+            labelMetodePembayaranFinal = `DP via QRIS (${formatRupiah(nilaiDPAngka)})`;
+        }
+
+        let dbPaket = []; let dbAddon = [];
+        daftarPaket.forEach(p => { if(document.getElementById(`chk_pkt_${p.id}`).checked) dbPaket.push(`1x ${p.name}`); });
+        daftarAddon.forEach(a => { if(document.getElementById(`chk_add_${a.id}`).checked) dbAddon.push(`${document.getElementById(`qty_add_${a.id}`).value}x ${a.name}`); });
+
+        let stringItemDB = "";
+        if(dbPaket.length > 0) stringItemDB += "[Paket] " + dbPaket.join(", ");
+        if(dbAddon.length > 0) stringItemDB += (stringItemDB ? " | " : "") + "[Ekstra] " + dbAddon.join(", ");
+
+        const payload = {
+            nama: document.getElementById("custName").value,
+            email: document.getElementById("custEmail").value,
+            hp: "+62" + document.getElementById("custPhone").value.replace(/^0+/, ''),
+            tanggal: selectedDate, 
+            sesi: selectedSlotsArray.join(", "),
+            item: stringItemDB,
+            total: formatRupiah(currentGrandTotal),
+            metode_bayar: labelMetodePembayaranFinal,
+            pay_type_raw: payMethodSelected, 
+            catatan: document.getElementById("custMessage").value.trim() || "-",
+            id_transaksi: currentTrxId,
+            file_base64: base64File, 
+            file_mime: mimeType
+        };
+
+        // BYPASS CORS ERROR DENGAN HEADER TEXT/PLAIN
+        fetch(SCRIPT_URL, {
+            method: "POST", 
+            mode: "no-cors", 
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload)
+        }).then(() => { 
+            tampilkanStrukAkhir(payMethodSelected); 
+        }).catch(() => { 
+            tampilkanStrukAkhir(payMethodSelected); 
+        });
+    }
+
+    function tampilkanStrukAkhir(payType) {
+        hideSteps(); document.getElementById("mainHeader").classList.add("hidden");
+        document.getElementById("step4").classList.remove("hidden");
+        
+        document.getElementById("invTrxId").innerText = "ID: " + currentTrxId; 
+        document.getElementById("invName").innerText = document.getElementById("custName").value;
+        let phoneInput = document.getElementById("custPhone").value.replace(/^0+/, '');
+        document.getElementById("invPhone").innerText = "+62" + phoneInput;
+        document.getElementById("invBookDate").innerText = document.getElementById("sumDate").innerText;
+        document.getElementById("invSlots").innerHTML = document.getElementById("sumSlots").innerHTML;
+        
+        updateSummary(true); 
+        document.getElementById("invGrandTotal").innerText = formatRupiah(currentGrandTotal);
+
+        let labelMetode = "";
+        if (payType === "Bayar di Tempat") {
+            labelMetode = "Akan Bayar Cash di Kasir";
+        } else if (payType === "Pelunasan QRIS") {
+            labelMetode = "Sudah Dibayar Lunas (QRIS)";
+        } else {
+            labelMetode = "Sudah Masuk DP (QRIS)";
+        }
+
+        document.getElementById("labelMetodeBayar").innerText = labelMetode;
+        document.getElementById("invDpAmount").innerText = (payType === "Bayar di Tempat") ? "Rp 0" : (payType === "Pelunasan QRIS" ? formatRupiah(currentGrandTotal) : formatRupiah(document.getElementById("customDpAmount").value));
+
+        window.scrollTo(0,0);
+    }
+
+    function bukaWhatsAppDanMintaResi() {
+        let pName = document.getElementById("custName").value;
+        let tglDisplay = document.getElementById("sumDate").innerText;
+        let note = document.getElementById("custMessage").value.trim();
+        const payType = document.querySelector('input[name="payType"]:checked').value;
+        let jamSesiAwal = document.getElementById("sumSlots").innerText;
+
+        let msg = `Halo Min! Aku mau konfirmasi booking sesi foto nih. Catat yaa:\n\n`;
+        msg += `- ID Transaksi: *${currentTrxId}*\n`;
+        msg += `- Nama: *${pName}*\n`;
+        msg += `- Tanggal: *${tglDisplay}*\n`;
+        msg += `- Sesi: *${jamSesiAwal}*\n\n`;
+        if(note) msg += `Catatan: _${note}_\n\n`;
+        
+        if(payType !== "Bayar di Tempat") {
+            msg += `*Berikut aku lampirin juga foto bukti resi transfernya ya Min!* 👇📸`;
+        } else {
+            msg += `Nanti aku bayar cash langsung di studio ya Min! ✨`;
+        }
+
+        window.open(`https://api.whatsapp.com/send?phone=6281338380100&text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function downloadInvoiceGambar() {
+        const btn = document.getElementById("btnDownload");
+        btn.innerText = "Memproses Gambar...";
+        
+        html2canvas(document.querySelector("#invoiceArea"), {scale: 2}).then(canvas => {
+            let a = document.createElement('a');
+            a.href = canvas.toDataURL("image/jpeg", 0.9);
+            a.download = `Invoice_Potokene_${currentTrxId}.jpg`;
+            a.click();
+            btn.innerHTML = `✅ Gambar Tersimpan!`;
+            setTimeout(() => { 
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg> Download Gambar Invoice Lagi`; 
+            }, 3000);
+        });
+    }
+
+    function hideSteps(){ ["step1","step2","step3","step4"].forEach(s => document.getElementById(s).classList.add("hidden")); }
+    
+    function renderTable(id, list, prefix){
+        const b = document.querySelector(`#${id} tbody`);
+        list.forEach(i => {
+            const r = document.createElement("tr");
+            const isPaket = prefix === 'pkt';
+            if (isPaket) {
+                r.innerHTML = `<td><label class="checkbox-container"><input type="radio" name="paketUtama" id="chk_${prefix}_${i.id}" onchange="updateSummary()"><span class="item-name">${i.name}<br><small>${formatRupiah(i.price)}</small></span></label></td>
+                <td style="text-align:center"><input type="number" id="qty_${prefix}_${i.id}" class="qty-input" value="1" min="1" disabled></td>`;
+            } else {
+                r.innerHTML = `<td><label class="checkbox-container"><input type="checkbox" id="chk_${prefix}_${i.id}" onchange="toggleItem('${prefix}','${i.id}')"><span class="item-name">${i.name}<br><small>${formatRupiah(i.price)}</small></span></label></td>
+                <td style="text-align:center"><input type="number" id="qty_${prefix}_${i.id}" class="qty-input" value="1" min="1" disabled oninput="updateSummary()"></td>`;
+            }
+            b.appendChild(r);
+        });
+    }
+
+    function toggleItem(p, id){ 
+        const c = document.getElementById(`chk_${p}_${id}`); 
+        const q = document.getElementById(`qty_${p}_${id}`); 
+        if (p !== 'pkt') q.disabled = !c.checked;
+        if(!c.checked && p !== 'pkt') q.value = 1;
+        updateSummary(); 
+    }
+
+    window.onload = () => {
+        const t = new Date(); document.getElementById("bookingDate").setAttribute("min", t.toISOString().split('T')[0]);
+        renderTable("paketTable", daftarPaket, "pkt"); renderTable("addonTable", daftarAddon, "add");
+        fetchBookedSlots();
+    };
+</script>
+</body>
+</html>
