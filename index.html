@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,9 +20,11 @@
             --success-color: #4caf50;
         }
 
+
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--bg-primary); color: var(--text-main); padding: 40px 20px; display: flex; justify-content: center; min-height: 100vh; }
         .container { max-width: 1000px; width: 100%; }
+
 
         /* HEADER DI FRONT END (Logo disesuaikan tidak bulat) */
         header { text-align: center; margin-bottom: 35px; display: flex; flex-direction: row; align-items: center; gap: 20px; justify-content: center;}
@@ -41,6 +42,7 @@
             .logo-info { align-items: center; text-align: center; }
         }
 
+
         .step-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
         .step3-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; } 
         
@@ -51,8 +53,10 @@
             .summary-sidebar { position: static; } 
         }
 
+
         .card { background-color: var(--bg-secondary); border-radius: 12px; padding: 30px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow); margin-bottom: 25px; }
         .card h2 { font-size: 1.3rem; margin-bottom: 20px; border-left: 4px solid var(--accent-color); padding-left: 10px; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; }
+
 
         .form-control { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
         .form-control label { font-size: 0.9rem; color: var(--text-muted); }
@@ -60,15 +64,18 @@
         textarea { resize: vertical; min-height: 80px; }
         input:focus, textarea:focus { border-color: var(--accent-color); }
 
+
         .phone-input-wrapper { display: flex; align-items: center; background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; transition: border 0.3s; }
         .phone-input-wrapper:focus-within { border-color: var(--accent-color); }
         .phone-prefix { padding: 12px 10px 12px 12px; color: var(--text-main); font-weight: bold; background-color: rgba(255,255,255,0.05); border-right: 1px solid var(--border-color); }
         .phone-input-wrapper input { border: none; background: transparent; border-radius: 0; outline: none; width: 100%; padding: 12px; color: var(--text-main); font-size: 1rem; }
 
+
         .date-wrapper { position: relative; width: 100%; cursor: pointer; }
         #fakeDate { cursor: pointer; position: relative; z-index: 1; }
         #bookingDate { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 3; }
         #bookingDate:disabled { cursor: not-allowed; }
+
 
         /* GRID JADWAL 3 KOLOM KONSUMEN */
         .slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
@@ -79,6 +86,7 @@
         .slot-btn:disabled { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
         .loading-text { font-size: 0.85rem; color: var(--accent-color); margin-top: 8px; font-weight: 500; }
 
+
         .btn-primary { background-color: var(--accent-color); color: #000; border: none; width: 100%; padding: 15px; border-radius: 8px; font-size: 1.1rem; font-weight: 800; cursor: pointer; transition: background-color 0.2s; margin-top: 20px; }
         .btn-primary:hover { background-color: var(--accent-hover); }
         .btn-primary:disabled { background-color: #444; cursor: not-allowed; color: #888; }
@@ -86,7 +94,9 @@
         .btn-download { background-color: #222; color: white; border: 1px solid #444; padding: 12px 15px; border-radius: 6px; font-size: 0.95rem; cursor: pointer; font-weight: bold; margin-top: 15px; width: 100%; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;}
         .btn-download:hover { background-color: #444; }
 
+
         .btn-back { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.9rem; text-decoration: underline; display: inline-block; margin-bottom: 15px;}
+
 
         .item-table { width: 100%; border-collapse: collapse; }
         .item-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
@@ -94,6 +104,7 @@
         .checkbox-container input[type="radio"], .checkbox-container input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent-color); cursor: pointer; }
         .qty-input { width: 50px; padding: 6px; text-align: center; background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 4px;}
         .qty-input:disabled { opacity: 0.3; cursor: not-allowed; border-style: dashed; }
+
 
         .summary-details { margin-bottom: 20px; border-bottom: 1px dashed var(--border-color); padding-bottom: 15px; }
         .summary-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.95rem; }
@@ -122,6 +133,7 @@
         .pay-radio input { accent-color: #000; transform: scale(1.2); margin-right: 10px; }
         .pay-radio div { display: flex; align-items: center; font-weight: 600; }
 
+
         /* QRIS DESIGN */
         .qris-box { background: white; border: 2px solid #ccc; border-radius: 8px; padding: 15px; text-align: center; margin-top: 15px; color: black; }
         .qris-image-wrapper { background: #f0f0f0; width: 220px; height: 220px; margin: 0 auto; display: flex; align-items: center; justify-content: center; border-radius: 6px; overflow: hidden; border: 1px solid #ddd; }
@@ -132,6 +144,7 @@
     </style>
 </head>
 <body>
+
 
 <div class="container">
     <header id="mainHeader">
@@ -151,6 +164,7 @@
         </div>
     </header>
 
+
     <div id="step1">
         <div class="card" style="max-width: 600px; margin: 0 auto;">
             <h2>Pilih Jadwal Foto Kamu</h2>
@@ -169,6 +183,7 @@
             <button class="btn-primary" id="btnNext" onclick="goToStep2()" disabled>Selanjutnya</button>
         </div>
     </div>
+
 
     <div id="step2" class="hidden">
         <div class="step-layout">
@@ -211,6 +226,7 @@
         </div>
     </div>
 
+
     <div id="step3" class="hidden">
         <button class="btn-back" onclick="goToStep2()">← Kembali Edit Pesanan</button>
         
@@ -227,6 +243,7 @@
                 </div>
             </div>
 
+
             <div class="main-form">
                 <div class="card" style="margin-bottom: 0;">
                     <h2 style="color:var(--accent-color); border:none; justify-content:center; margin-bottom: 5px;">Pilih Metode Pembayaran</h2>
@@ -236,6 +253,7 @@
                         <label class="pay-radio"><div><input type="radio" name="payType" value="Bayar di Tempat" onchange="handlePaymentMethodChange()"> Bayar Cash di Kasir Studio</div></label>
                     </div>
 
+
                     <div id="customDpWrapper" style="margin-top: 20px; background:#fff; padding:15px; border-radius:8px;">
                         <label style="font-size: 0.9rem; font-weight: bold; color:#111;">Tentukan Nominal DP Kamu (Minimal Rp 20.000):</label>
                         <div style="display: flex; gap: 10px;">
@@ -244,25 +262,29 @@
                         </div>
                     </div>
 
+
                     <div id="uploadResiWrapper" class="hidden" style="margin-top: 15px; background:#fff; padding:15px; border-radius:8px;">
                         <label style="font-size: 0.9rem; font-weight: bold; color:#111;">Upload Bukti Transfer (Maks 2MB):</label>
                         <input type="file" id="buktiTransfer" accept="image/*" style="width: 100%; margin-top: 8px; color:#111; border: 1px solid #ccc; padding: 5px; border-radius: 4px;">
                     </div>
 
+
                     <div id="qrisContainer" class="qris-box hidden">
                         <div style="font-weight: 800; font-size: 1.1rem;">QRIS LIVIN MERCHANT</div>
                         <div style="font-size: 0.75rem; color: #666; font-weight: bold; margin-bottom: 10px;">POTOKENE SELF PHOTO STUDIO</div>
                         <div id="qrisResultArea" class="hidden">
-                            <div class="qris-image-wrapper"><img id="qrisImg" src="qris.jpg" alt="Scan QRIS Potokene"></div>
+                            <div class="qris-image-wrapper"><img id="qrisImg" src="images/qris.jpg" alt="Scan QRIS Potokene"></div>
                             <div style="font-size: 1.3rem; font-weight: 800; margin-top: 10px;" id="qrisDisplayAmount">Rp 0</div>
                         </div>
                     </div>
+
 
                     <button class="btn-primary" id="btnFinalSubmit" onclick="submitFinalDanPreviewInvoice()" style="margin-top:25px;">Selesaikan & Preview Invoice</button>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div id="step4" class="hidden">
         <div class="receipt-wrapper" id="invoiceArea">
@@ -287,11 +309,13 @@
                 <div id="invPaketSection"><div class="receipt-section-title">Item Paket:</div><div id="invPaketArea"></div></div>
                 <div id="invAddonSection" class="hidden"><div class="receipt-section-title">Ekstra (Add-On):</div><div id="invAddonArea"></div></div>
 
+
                 <div class="r-divider"></div>
                 <div class="r-row"><span class="r-bold" style="font-size:1.1rem;">TOTAL TAGIHAN</span><span id="invGrandTotal" style="font-size:1.1rem; font-weight:bold;"></span></div>
                 <div class="r-row" style="color: green; margin-top:5px;"><span class="r-bold" id="labelMetodeBayar"></span><span id="invDpAmount" style="font-weight:bold;"></span></div>
             </div>
         </div>
+
 
         <div style="max-width: 500px; margin: 0 auto;">
             <button class="btn-download" id="btnDownload" onclick="downloadInvoiceGambar()">
@@ -304,19 +328,24 @@
         </div>
     </div>
 
+
 </div>
+
 
 <script>
     // URL SAKTI APPS SCRIPT
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxh2gwKPwfP-j7D594-S2RTf7HKtzYXefllanC6P55IJbUSS-Kv_o8BBwaoUlxZoO0/exec'; 
 
+
     const timeSlots = ["10.00","10.30","11.00","11.30","12.00","12.30","13.00","13.30","14.00","14.30","15.00","15.30","16.00","16.30","17.00","17.30","18.00","18.30","19.00","19.30","20.00"];
     const daftarPaket = [{id:"p1",name:"Solo / Squad",price:50000},{id:"p2",name:"Mid Circle",price:90000},{id:"p3",name:"Party Group",price:125000},{id:"p4",name:"Pas Foto",price:35000},{id:"p5",name:"Couple Blue",price:120000}];
     const daftarAddon = [{id:"a1",name:"SPOTLIGHT",price:25000},{id:"a2",name:"PERSONIL",price:15000},{id:"a3",name:"DURASI (5 MNT)",price:10000},{id:"a4",name:"CETAK 4R",price:10000},{id:"a5",name:"COSTUME ANIMAL",price:10000},{id:"a6",name:"PENGARAH GAYA",price:20000},{id:"a7",name:"KEYCHAIN",price:10000},{id:"a9",name:"PIGURA 10RS",price:70000},{id:"a10",name:"PIGURA 4R",price:25000}];
 
+
     let selectedDate = "", selectedSlotsArray = [], currentGrandTotal = 0;
     let globalBookedData = {}; let currentTrxId = ""; 
     let base64File = ""; let mimeType = ""; // Variabel penampung gambar
+
 
     // Event listener untuk membaca upload file resi
     document.addEventListener("DOMContentLoaded", () => {
@@ -344,7 +373,9 @@
         }
     });
 
+
     function formatRupiah(a){ return "Rp "+parseInt(a).toLocaleString('id-ID'); }
+
 
     function generateTrxId() {
         const d = new Date();
@@ -355,6 +386,7 @@
         return `PTK-${yy}${mm}${dd}-${randomStr}`;
     }
 
+
     function formatTanggalIndo(dateStr) {
         const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
         const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -362,10 +394,12 @@
         return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
     }
 
+
     function fetchBookedSlots() {
         const loader = document.getElementById("loadingSlots");
         const bDate = document.getElementById("bookingDate");
         const bWrapper = document.getElementById("dateInputWrapper");
+
 
         loader.classList.remove("hidden");
         bDate.disabled = true; bWrapper.style.opacity = "0.4"; bWrapper.style.pointerEvents = "none";
@@ -384,6 +418,7 @@
         });
     }
 
+
     function handleDateChange(){
         selectedDate = document.getElementById("bookingDate").value;
         if(selectedDate){
@@ -397,6 +432,7 @@
         }
     }
 
+
     function renderSlots(dStr, keyTanggal){
         const container = document.getElementById("slotsContainer");
         container.innerHTML = ""; selectedSlotsArray = [];
@@ -404,6 +440,7 @@
         
         const now = new Date(), sel = new Date(dStr), isToday = sel.toDateString() === now.toDateString();
         let lakuDiTanggalIni = globalBookedData[keyTanggal] || {};
+
 
         timeSlots.forEach(s => {
             let [h, m] = s.split('.').map(Number);
@@ -416,6 +453,7 @@
             
             let isPast = isToday && (h < now.getHours() || (h === now.getHours() && m <= now.getMinutes()));
             let isAlreadyBooked = lakuDiTanggalIni[fullTextSlot] !== undefined;
+
 
             if(isPast || isAlreadyBooked) {
                 btn.disabled = true; 
@@ -438,6 +476,7 @@
         });
     }
 
+
     function goToStep1(){ hideSteps(); document.getElementById("step1").classList.remove("hidden"); }
     function goToStep2(){ 
         hideSteps(); document.getElementById("step2").classList.remove("hidden");
@@ -450,6 +489,7 @@
         updateSummary(); window.scrollTo(0,0);
     }
 
+
     function goToStep3(){
         if(!document.getElementById("custName").value || !document.getElementById("custPhone").value){ 
             alert("Isi nama dan nomer WA dulu bro!"); return; 
@@ -457,16 +497,20 @@
         let adaPaket = document.querySelector('input[name="paketUtama"]:checked');
         if(!adaPaket){ alert(`Silakan pilih salah satu Paket Utama studio dulu kak!`); return; }
 
+
         currentTrxId = generateTrxId();
         hideSteps(); document.getElementById("step3").classList.remove("hidden");
+
 
         document.getElementById("sumDatePay").innerText = document.getElementById("sumDate").innerText;
         document.getElementById("sumSlotsPay").innerHTML = document.getElementById("sumSlots").innerHTML;
         document.getElementById("sumItemsContainerPay").innerHTML = document.getElementById("sumItemsContainer").innerHTML;
         document.getElementById("grandTotalDisplayPay").innerText = document.getElementById("grandTotalDisplay").innerText;
 
+
         handlePaymentMethodChange(); window.scrollTo(0,0);
     }
+
 
     function handlePaymentMethodChange() {
         const payType = document.querySelector('input[name="payType"]:checked').value;
@@ -474,6 +518,7 @@
         const qrisResult = document.getElementById("qrisResultArea");
         const dpWrapper = document.getElementById("customDpWrapper");
         const uploadWrapper = document.getElementById("uploadResiWrapper");
+
 
         if (payType === "Bayar di Tempat") {
             qrisBox.classList.add("hidden"); qrisResult.classList.add("hidden");
@@ -484,7 +529,7 @@
             dpWrapper.classList.add("hidden");
             uploadWrapper.classList.remove("hidden");
             document.getElementById("qrisDisplayAmount").innerText = formatRupiah(currentGrandTotal);
-            document.getElementById("qrisImg").src = "qris.jpg";
+            document.getElementById("qrisImg").src = "images/qris.jpg";
         } else if (payType === "DP Bebas") {
             qrisBox.classList.remove("hidden"); qrisResult.classList.add("hidden"); 
             dpWrapper.classList.remove("hidden");
@@ -492,17 +537,20 @@
         }
     }
 
+
     function generateQrisClick() {
         let nominalDP = parseInt(document.getElementById("customDpAmount").value) || 0;
         if(nominalDP < 20000) { alert("Minimal DP adalah Rp 20.000 ya kak!"); return; }
         document.getElementById("qrisResultArea").classList.remove("hidden");
         document.getElementById("qrisDisplayAmount").innerText = formatRupiah(nominalDP);
-        document.getElementById("qrisImg").src = "qris.jpg";
+        document.getElementById("qrisImg").src = "images/qris.jpg";
     }
+
 
     function updateSummary(isInvoice = false){
         currentGrandTotal = 0; let paketOrderHTML = ""; let addonOrderHTML = "";
         let sidebarPaketHTML = ""; let sidebarAddonHTML = "";
+
 
         daftarPaket.forEach(item => {
             const chk = document.getElementById(`chk_pkt_${item.id}`).checked;
@@ -512,6 +560,7 @@
                 paketOrderHTML += `<div class="r-row"><span>1x ${item.name}</span> <span>${formatRupiah(item.price)}</span></div>`;
             }
         });
+
 
         daftarAddon.forEach(item => {
             const chk = document.getElementById(`chk_add_${item.id}`).checked;
@@ -538,10 +587,12 @@
         }
     }
 
+
     function submitFinalDanPreviewInvoice(){
         const btnSubmit = document.querySelector("#btnFinalSubmit");
         btnSubmit.disabled = true; 
         btnSubmit.innerText = "⏳ Sedang Menyimpan Data...";
+
 
         const payMethodSelected = document.querySelector('input[name="payType"]:checked').value;
         let labelMetodePembayaranFinal = payMethodSelected;
@@ -550,13 +601,16 @@
             labelMetodePembayaranFinal = `DP via QRIS (${formatRupiah(nilaiDPAngka)})`;
         }
 
+
         let dbPaket = []; let dbAddon = [];
         daftarPaket.forEach(p => { if(document.getElementById(`chk_pkt_${p.id}`).checked) dbPaket.push(`1x ${p.name}`); });
         daftarAddon.forEach(a => { if(document.getElementById(`chk_add_${a.id}`).checked) dbAddon.push(`${document.getElementById(`qty_add_${a.id}`).value}x ${a.name}`); });
 
+
         let stringItemDB = "";
         if(dbPaket.length > 0) stringItemDB += "[Paket] " + dbPaket.join(", ");
         if(dbAddon.length > 0) stringItemDB += (stringItemDB ? " | " : "") + "[Ekstra] " + dbAddon.join(", ");
+
 
         const payload = {
             nama: document.getElementById("custName").value,
@@ -573,6 +627,7 @@
             file_mime: mimeType
         };
 
+
         // BYPASS CORS ERROR DENGAN HEADER TEXT/PLAIN
         fetch(SCRIPT_URL, {
             method: "POST", 
@@ -585,6 +640,7 @@
             tampilkanStrukAkhir(payMethodSelected); 
         });
     }
+
 
     function tampilkanStrukAkhir(payType) {
         hideSteps(); document.getElementById("mainHeader").classList.add("hidden");
@@ -600,6 +656,7 @@
         updateSummary(true); 
         document.getElementById("invGrandTotal").innerText = formatRupiah(currentGrandTotal);
 
+
         let labelMetode = "";
         if (payType === "Bayar di Tempat") {
             labelMetode = "Akan Bayar Cash di Kasir";
@@ -609,11 +666,14 @@
             labelMetode = "Sudah Masuk DP (QRIS)";
         }
 
+
         document.getElementById("labelMetodeBayar").innerText = labelMetode;
         document.getElementById("invDpAmount").innerText = (payType === "Bayar di Tempat") ? "Rp 0" : (payType === "Pelunasan QRIS" ? formatRupiah(currentGrandTotal) : formatRupiah(document.getElementById("customDpAmount").value));
 
+
         window.scrollTo(0,0);
     }
+
 
     function bukaWhatsAppDanMintaResi() {
         let pName = document.getElementById("custName").value;
@@ -621,6 +681,7 @@
         let note = document.getElementById("custMessage").value.trim();
         const payType = document.querySelector('input[name="payType"]:checked').value;
         let jamSesiAwal = document.getElementById("sumSlots").innerText;
+
 
         let msg = `Halo Min! Aku mau konfirmasi booking sesi foto nih. Catat yaa:\n\n`;
         msg += `- ID Transaksi: *${currentTrxId}*\n`;
@@ -635,8 +696,10 @@
             msg += `Nanti aku bayar cash langsung di studio ya Min! ✨`;
         }
 
+
         window.open(`https://api.whatsapp.com/send?phone=6281338380100&text=${encodeURIComponent(msg)}`, '_blank');
     }
+
 
     function downloadInvoiceGambar() {
         const btn = document.getElementById("btnDownload");
@@ -653,6 +716,7 @@
             }, 3000);
         });
     }
+
 
     function hideSteps(){ ["step1","step2","step3","step4"].forEach(s => document.getElementById(s).classList.add("hidden")); }
     
@@ -672,6 +736,7 @@
         });
     }
 
+
     function toggleItem(p, id){ 
         const c = document.getElementById(`chk_${p}_${id}`); 
         const q = document.getElementById(`qty_${p}_${id}`); 
@@ -679,6 +744,7 @@
         if(!c.checked && p !== 'pkt') q.value = 1;
         updateSummary(); 
     }
+
 
     window.onload = () => {
         const t = new Date(); document.getElementById("bookingDate").setAttribute("min", t.toISOString().split('T')[0]);
