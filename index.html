@@ -177,7 +177,6 @@
                     <h2>Informasi Pemesan <button class="btn-back" onclick="goToStep1()" style="margin-bottom:0; display:inline;">← Ubah Jadwal</button></h2>
                     <div class="form-group">
                         <div class="form-control"><label>Nama Lengkap *</label><input type="text" id="custName" required></div>
-                        <div class="form-control"><label>Email *</label><input type="email" id="custEmail" required></div>
                         <div class="form-control">
                             <label>Nomor HP / WA *</label>
                             <div class="phone-input-wrapper">
@@ -238,9 +237,9 @@
                     </div>
 
                     <div id="customDpWrapper" style="margin-top: 20px; background:#fff; padding:15px; border-radius:8px;">
-                        <label style="font-size: 0.9rem; font-weight: bold; color:#111;">Tentukan Nominal DP Kamu (Rp):</label>
+                        <label style="font-size: 0.9rem; font-weight: bold; color:#111;">Tentukan Nominal DP Kamu (Minimal Rp 20.000):</label>
                         <div style="display: flex; gap: 10px;">
-                            <input type="number" id="customDpAmount" class="dp-input-field" value="25000" min="1">
+                            <input type="number" id="customDpAmount" class="dp-input-field" value="25000" min="20000">
                             <button class="btn-primary" style="margin-top: 5px; padding: 0 20px; width: auto;" onclick="generateQrisClick()">Buka QRIS</button>
                         </div>
                     </div>
@@ -297,7 +296,7 @@
         <div style="max-width: 500px; margin: 0 auto;">
             <button class="btn-download" id="btnDownload" onclick="downloadInvoiceGambar()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
-                Download Gambar Invoice
+                Download Lampiran Invoice
             </button>
             <p style="font-size:0.8rem; text-align:center; color:var(--text-muted); margin-top:8px; margin-bottom:20px;">*Wajib disave untuk bukti ke studio nanti.</p>
             
@@ -495,7 +494,7 @@
 
     function generateQrisClick() {
         let nominalDP = parseInt(document.getElementById("customDpAmount").value) || 0;
-        if(nominalDP < 1) { alert("Ketik nominal uangnya dulu kak!"); return; }
+        if(nominalDP < 20000) { alert("Minimal DP adalah Rp 20.000 ya kak!"); return; }
         document.getElementById("qrisResultArea").classList.remove("hidden");
         document.getElementById("qrisDisplayAmount").innerText = formatRupiah(nominalDP);
         document.getElementById("qrisImg").src = "qris.jpg";
@@ -561,7 +560,6 @@
 
         const payload = {
             nama: document.getElementById("custName").value,
-            email: document.getElementById("custEmail").value,
             hp: "+62" + document.getElementById("custPhone").value.replace(/^0+/, ''),
             tanggal: selectedDate, 
             sesi: selectedSlotsArray.join(", "),
