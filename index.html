@@ -273,7 +273,7 @@
                         <div style="font-weight: 800; font-size: 1.1rem;">QRIS LIVIN MERCHANT</div>
                         <div style="font-size: 0.75rem; color: #666; font-weight: bold; margin-bottom: 10px;">POTOKENE SELF PHOTO STUDIO</div>
                         <div id="qrisResultArea" class="hidden">
-                            <div class="qris-image-wrapper"><img id="qrisImg" src="images/qris.jpg" alt="Scan QRIS Potokene"></div>
+                            <div class="qris-image-wrapper"><img id="qrisImg" src="images/qris.jpeg" alt="Scan QRIS Potokene"></div>
                             <div style="font-size: 1.3rem; font-weight: 800; margin-top: 10px;" id="qrisDisplayAmount">Rp 0</div>
                         </div>
                     </div>
@@ -529,7 +529,7 @@
             dpWrapper.classList.add("hidden");
             uploadWrapper.classList.remove("hidden");
             document.getElementById("qrisDisplayAmount").innerText = formatRupiah(currentGrandTotal);
-            document.getElementById("qrisImg").src = "images/qris.jpg";
+            document.getElementById("qrisImg").src = "images/qris.jpeg";
         } else if (payType === "DP Bebas") {
             qrisBox.classList.remove("hidden"); qrisResult.classList.add("hidden"); 
             dpWrapper.classList.remove("hidden");
@@ -543,7 +543,7 @@
         if(nominalDP < 20000) { alert("Minimal DP adalah Rp 20.000 ya kak!"); return; }
         document.getElementById("qrisResultArea").classList.remove("hidden");
         document.getElementById("qrisDisplayAmount").innerText = formatRupiah(nominalDP);
-        document.getElementById("qrisImg").src = "images/qris.jpg";
+        document.getElementById("qrisImg").src = "images/qris.jpeg";
     }
 
 
