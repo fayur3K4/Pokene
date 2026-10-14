@@ -6,7 +6,6 @@
     <title>Booking POTOKENE</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* TONE WARNA: Charcoal Dark & Lime Green */
         :root {
             --bg-primary: #141714;
             --bg-secondary: #1f241f;
@@ -25,7 +24,6 @@
         body { background-color: var(--bg-primary); color: var(--text-main); padding: 40px 20px; display: flex; justify-content: center; min-height: 100vh; }
         .container { max-width: 1000px; width: 100%; }
 
-        /* HEADER DI FRONT END */
         header { text-align: center; margin-bottom: 35px; display: flex; flex-direction: row; align-items: center; gap: 20px; justify-content: center;}
         .logo-img { width: 100%; max-width: 180px; height: auto; object-fit: contain; flex-shrink: 0;}
         .logo-info { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; text-align: left;}
@@ -54,7 +52,7 @@
 
         .form-control { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
         .form-control label { font-size: 0.9rem; color: var(--text-muted); }
-        input[type="text"], input[type="email"], select, textarea { background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; color: var(--text-main); font-size: 1rem; outline: none; transition: border 0.3s; width: 100%; }
+        input[type="text"], input[type="email"], input[type="number"], select, textarea { background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; color: var(--text-main); font-size: 1rem; outline: none; transition: border 0.3s; width: 100%; }
         select option { background-color: var(--bg-secondary); color: var(--text-main); }
         textarea { resize: vertical; min-height: 80px; }
         input:focus, select:focus, textarea:focus { border-color: var(--accent-color); }
@@ -98,7 +96,6 @@
         .summary-row.item-line { font-size: 0.85rem; color: var(--text-muted); padding-left: 10px; }
         .summary-total { display: flex; justify-content: space-between; align-items: center; font-size: 1.3rem; font-weight: bold; color: var(--accent-color); margin-top: 15px; margin-bottom: 25px; }
         
-        /* INVOICE DESIGN */
         .receipt-wrapper { background-color: #f7f9f7; color: #111; max-width: 500px; margin: 0 auto 20px auto; border-radius: 8px; padding: 30px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .receipt-wrapper::after { content: ""; position: absolute; bottom: -10px; left: 0; right: 0; height: 10px; background-size: 20px 20px; background-image: radial-gradient(circle at 10px 10px, transparent 12px, #f7f9f7 13px); }
         .r-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.9rem; }
@@ -112,14 +109,12 @@
         .invoice-address p { margin-bottom: 2px; font-weight: bold;}
         .invoice-id-center { font-size: 1.15rem; font-weight: 800; color: #111; margin-top: 15px; letter-spacing: 1px; text-align: center;}
         
-        /* PAYMENT STYLING */
         .payment-options { background: #eaecea; padding: 15px; border-radius: 6px; margin-top: 20px; color: #111;}
         .pay-radio { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd; cursor: pointer; }
         .pay-radio:last-child { border-bottom: none; }
         .pay-radio input { accent-color: #000; transform: scale(1.2); margin-right: 10px; }
         .pay-radio div { display: flex; align-items: center; font-weight: 600; }
 
-        /* QRIS DESIGN */
         .qris-box { background: white; border: 2px solid #ccc; border-radius: 8px; padding: 15px; text-align: center; margin-top: 15px; color: black; }
         .qris-image-wrapper { background: #f0f0f0; width: 220px; height: 220px; margin: 0 auto; display: flex; align-items: center; justify-content: center; border-radius: 6px; overflow: hidden; border: 1px solid #ddd; }
         .qris-image-wrapper img { width: 100%; height: 100%; object-fit: contain; }
@@ -141,7 +136,7 @@
                     Maps Studio
                 </a>
                 <a href="https://wa.me/6281338380100" target="_blank" class="wa-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.948h.083c4.368 0 7.928-3.558 7.929-7.926a7.883 7.883 0 0 0-2.331-5.674zm-3.36 10.399a.66.66 0 0 1-.264.137c-.12.032-.24.032-.36.032-.12 0-.24-.016-.36-.048l-.071-.02-.132-.036a.664.664 0 0 1-.228-.097.662.662 0 0 1-.168-.141l-.039-.039a.662.662 0 0 1-.132-.168.66.66 0 0 1-.115-.22l-.012-.035-.01-.031a.66.66 0 0 1-.033-.36c0-.12 0-.24.017-.36.012-.12.028-.24.045-.36.02-.12.037-.24.053-.36l.036-.201a.66.66 0 0 1 .132-.264.66.66 0 0 1 .168-.168.66.66 0 0 1 .228-.132l.024-.01a.66.66 0 0 1 .36-.049c.12 0 .24 0 .36.012.12.012.24.024.36.037.12.016.24.032.36.049h.036c.12 0 .24-.001.36-.016.12-.016.24-.032.36-.048.12-.017.24-.033.36-.049h.016a.66.66 0 0 1 .264.132.66.66 0 0 1 .168.168.66.66 0 0 1 .132.228l.008.016a.66.66 0 0 1 .041.36c.004.12 0 .24 0 .36.004.12 0 .24 0 .36l.004.22c.004.12 0 .24 0 .36-.004.12 0 .24 0 .36-.004.12 0 .24 0 .36.004.12.012.24.02.36l.004.22a.663.663 0 0 0 .115.22c.036.072.08.132.132.18l.028.024a.663.663 0 0 0 .228.112.66.66 0 0 0 .36.02c.12-.008.24-.016.36-.024l.112-.008c.12-.004.24-.004.36-.004.12 0 .24-.004.36-.008h.036a.664.664 0 0 0 .264-.132.663.663 0 0 0 .168-.168.66.66 0 0 0 .132-.228.663.663 0 0 0 .04-.36c.004-.12 0-.24.004-.36-.004-.12-.008-.24-.012-.36l-.004-.22a.663.663 0 0 0-.115-.22zm-6.2 8.76a.66.66 0 0 0 .264-.132.662.662 0 0 0 .168-.168.66.66 0 0 0 .132-.228.663.663 0 0 0 .041-.36c.004-.12 0-.24.004-.36.004-.12.008-.24.012-.36l.004-.22a.663.663 0 0 0-.115-.22.66.66 0 0 0-.168-.168.662.662 0 0 0-.228-.112.66.66 0 0 0-.36-.036.66.66 0 0 0-.36.036.66.66 0 0 0-.228.112.66.66 0 0 0-.168.168.663.663 0 0 0-.132.228l-.004.012a.663.663 0 0 0-.04.36c-.004.12 0 .24-.004.36-.004.12-.012.24-.02.36l-.004.22a.663.663 0 0 0 .115.22zm.44-7.16c-.12-.012-.24-.024-.36-.036-.12-.012-.24-.024-.36-.036a.66.66 0 0 0-.228.096.66.66 0 0 0-.168.14l-.012.012a.662.662 0 0 0-.132.168.66.66 0 0 0-.115.22c-.004.12 0 .24 0 .36.004.12 0 .24 0 .36l.004.22c.004.12 0 .24 0 .36-.004.12 0 .24 0 .36.004.12.012.24.02.36l.004.22a.662.662 0 0 0 .115.22.663.663 0 0 0 .168.168l.02.016a.66.66 0 0 0 .228.112.66.66 0 0 0 .36.036.66.66 0 0 0 .36-.036l.016-.016a.66.66 0 0 0 .168-.168zm6.6-.84c-.12-.016-.24-.032-.36-.048-.12-.016-.24-.032-.36-.048a.66.66 0 0 0-.228.096.663.663 0 0 0-.168.14l-.012.012a.662.662 0 0 0-.132.168.66.66 0 0 0-.115.22c-.004.12 0 .24.004.36.004.12.008.24.012.36l.008.22c.004.12.012.24.02.36.008.12.016.24.024.36l.012.232a.662.662 0 0 0 .115.22.663.663 0 0 0 .168.168l.02.016a.66.66 0 0 0 .228.112.66.66 0 0 0 .36.036.66.66 0 0 0 .36-.036l.016-.016a.66.66 0 0 0 .168-.168z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.948h.083c4.368 0 7.928-3.558 7.929-7.926a7.883 7.883 0 0 0-2.331-5.674zm-3.36 10.399a.66.66 0 0 1-.264.137c-.12.032-.24.032-.36.032-.12 0-.24-.016-.36-.048l-.071-.02-.132-.036a.664.664 0 0 1-.228-.097.662.662 0 0 1-.168-.141l-.039-.039a.662.662 0 0 1-.132-.168.66.66 0 0 1-.115-.22l-.012-.035-.01-.031a.66.66 0 0 1-.033-.36c0-.12 0-.24.017-.36.012-.12.028-.24.045-.36.02-.12.037-.24.053-.36l.036-.201a.66.66 0 0 1 .132-.264.66.66 0 0 1 .168-.168.66.66 0 0 1 .228-.132l.024-.01a.66.66 0 0 1 .36-.049c.12 0 .24 0 .36.012.12.012.24.024.36.037.12.016.24.032.36.049h.036c.12 0 .24-.001.36-.016.12-.016.24-.032.36-.048.12-.017.24-.033.36-.049h.016a.66.66 0 0 1 .264.132.66.66 0 0 1 .168.168.66.66 0 0 1 .132.228l.008.016a.66.66 0 0 1 .041.36c.004.12 0 .24 0 .36.004.12 0 .24 0 .36l.004.22c.004.12 0 .24 0 .36-.004.12 0 .24 0 .36.004.12.012.24.02.36l.004.22a.663.663 0 0 0 .115.22c.036.072.08.132.132.18l.028.024a.663.663 0 0 0 .228.112.66.66 0 0 0 .36.02c.12-.008.24-.016.36-.024l.112-.008c.12-.004.24-.004.36-.004.12 0 .24-.004.36-.008h.036a.664.664 0 0 0 .264-.132.663.663 0 0 0 .168-.168.66.66 0 0 0 .132-.228.663.663 0 0 0 .04-.36c.004-.12 0-.24.004-.36-.004-.12-.008-.24-.012-.36l-.004-.22a.663.663 0 0 0-.115-.22zm-6.2 8.76a.66.66 0 0 0 .264-.132.662.662 0 0 0 .168-.168.66.66 0 0 0 .132-.228.663.663 0 0 0 .041-.36c.004-.12 0-.24.004-.36.004-.12.008-.24.012-.36l.004-.22a.663.663 0 0 0-.115-.22.66.66 0 0 0-.168-.168.662.662 0 0 0-.228-.112.66.66 0 0 0-.36-.036.66.66 0 0 0-.36.036.66.66 0 0 0-.228.112.66.66 0 0 0-.168.168.663.663 0 0 0-.132.228l-.004.012a.663.663 0 0 0-.04.36c-.004.12 0 .24-.004.36-.004.12-.012.24-.02.36l-.004.22a.663.663 0 0 0 .115.22zm.44-7.16c-.12-.012-.24-.024-.36-.036-.12-.012-.24-.024-.36-.036a.66.66 0 0 0-.228.096.66.66 0 0 0-.168.14l-.012.012a.662.662 0 0 0-.132.168.66.66 0 0 0-.115.22c-.004.12 0 .24 0 .36.004.12 0 .24 0 .36l.004.22c.004.12 0 .24 0 .36-.004.12 0 .24 0 .36.004.12.012.24.02.36l.004.22a.662.662 0 0 0 .115.22.663.663 0 0 0 .168.168l.02.016a.66.66 0 0 0 .228.112.66.66 0 0 0 .36.036.66.66 0 0 0 .36-.036l.016-.016a.66.66 0 0 0 .168-.168zm6.6-.84c-.12-.016-.24-.032-.36-.048-.12-.016-.24-.032-.36-.048a.66.66 0 0 0-.228.096.663.663 0 0 0-.168.14l-.012.012a.662.662 0 0 0-.132.168.66.66 0 0 0-.115.22c-.004.12 0 .24.004.36.004.12.008.24.012.36l.008.22c.004.12.012.24.02.36.008.12.016.24.024.36l.012.232a.662.662 0 0 0 .115.22.663.663 0 0 0 .168.168l.02.016a.66.66 0 0 0 .228.112.66.66 0 0 0 .36.036.66.66 0 0 0 .36-.036l.016-.016a.66.66 0 0 0 .168-.168z"/></svg>
                     WA Admin
                 </a>
             </div>
@@ -185,41 +180,64 @@
                         <div class="form-control"><label>Pesan Tambahan (Opsional)</label><textarea id="custMessage"></textarea></div>
                     </div>
                 </div>
+
+                <!-- KARTU 1: KATEGORI & JENIS UTAMA -->
                 <div class="card">
-                    <h2>Pilih Paket Utama</h2>
+                    <h2>1. Kategori & Jenis Paket</h2>
                     <div class="form-control">
-                        <label>Kategori Paket</label>
+                        <label>Pilih Kategori</label>
                         <select id="paketCategorySelect" onchange="handleCategoryChange()">
-                            <option value="formal">Photo Formal</option>
                             <option value="self">Self Photo</option>
+                            <option value="formal">Photo Formal</option>
                         </select>
                     </div>
-                    <div id="formalPackageContainer">
-                        <table class="item-table" id="formalPaketTable"><tbody></tbody></table>
-                    </div>
-                    <div id="selfPackageContainer" class="hidden">
-                        <div class="form-control" style="margin-top: 15px;">
-                            <label>Jenis Self Photo</label>
-                            <select id="selfTypeSelect" onchange="updateSelfPackageOptions()">
-                                <option value="SOLO / SQUAD">SOLO / SQUAD (Max 3 orang)</option>
-                                <option value="MID CIRCLE">MID CIRCLE (Max 7 orang)</option>
-                                <option value="PARTY GROUP">PARTY GROUP (Max 12 orang)</option>
-                                <option value="PARTY GROUP >12">PARTY GROUP &gt;12 (13 - 25 orang)</option>
-                            </select>
-                        </div>
-                        <div class="form-control" style="margin-top: 10px;">
-                            <label>Pilihan Paket & Tier</label>
-                            <select id="selfTierSelect" onchange="updateSummary()">
-                                <!-- Dihasilkan secara dinamis via JS -->
-                            </select>
-                        </div>
+                    <div id="selfTypeWrapper" class="form-control">
+                        <label>Jenis Self Photo</label>
+                        <select id="selfTypeSelect" onchange="handleSelfTypeChange()">
+                            <option value="SOLO / SQUAD">SOLO / SQUAD (Max 3 Orang)</option>
+                            <option value="MID CIRCLE">MID CIRCLE (Max 7 Orang)</option>
+                            <option value="PARTY GROUP">PARTY GROUP (Max 12 Orang)</option>
+                            <option value="PARTY GROUP >12">PARTY GROUP &gt;12 (13 - 25 Orang)</option>
+                        </select>
                     </div>
                 </div>
+
+                <!-- KARTU 2: PILIHAN TIER PAKET -->
+                <div class="card" id="tierCardWrapper">
+                    <h2>2. Pilih Tier Paket Self Photo</h2>
+                    <div class="form-control">
+                        <label>Tier Paket</label>
+                        <select id="selfTierSelect" onchange="handleTierChange()">
+                            <option value="BASIC">BASIC</option>
+                            <option value="PLUS">PLUS</option>
+                            <option value="PREMIUM">PREMIUM</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- KARTU 3: JUMLAH ORANG / KAPASITAS -->
+                <div class="card" id="paxCardWrapper">
+                    <h2>3. Jumlah Orang (Kapasitas)</h2>
+                    <div class="form-control">
+                        <label id="paxLabel">Masukkan Jumlah Orang (Maksimal 3 Orang)</label>
+                        <input type="number" id="paxInput" value="1" min="1" max="3" oninput="validateAndCalculate()">
+                        <small id="paxInfoText" style="color: var(--text-muted); font-size: 0.8rem;"></small>
+                    </div>
+                </div>
+
+                <!-- KARTU FORMAL (Hanya muncul jika kategori Photo Formal) -->
+                <div class="card hidden" id="formalCardWrapper">
+                    <h2>2. Pilih Jenis Photo Formal</h2>
+                    <table class="item-table" id="formalPaketTable"><tbody></tbody></table>
+                </div>
+
+                <!-- KARTU EKSTRA (ADD-ON) -->
                 <div class="card">
-                    <h2>Pilih Ekstra (Add-On)</h2>
+                    <h2>Ekstra (Add-On Opsional)</h2>
                     <table class="item-table" id="addonTable"><tbody></tbody></table>
                 </div>
             </div>
+
             <div class="summary-sidebar">
                 <div class="card">
                     <h2>Rincian Sementara</h2>
@@ -331,7 +349,6 @@
 </div>
 
 <script>
-    // URL SAKTI APPS SCRIPT
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxh2gwKPwfP-j7D594-S2RTf7HKtzYXefllanC6P55IJbUSS-Kv_o8BBwaoUlxZoO0/exec'; 
 
     const timeSlots = ["10.00","10.30","11.00","11.30","12.00","12.30","13.00","13.30","14.00","14.30","15.00","15.30","16.00","16.30","17.00","17.30","18.00","18.30","19.00","19.30","20.00"];
@@ -343,37 +360,31 @@
         {id:"f4", name:"Couple Blue", price:120000}
     ];
 
-    const selfPackageData = {
-        "SOLO / SQUAD": [
-            { tier: "BASIC", maxPax: 3, price: 50000 },
-            { tier: "PLUS", maxPax: 3, price: 59000 },
-            { tier: "PREMIUM", maxPax: 3, price: 66000 }
-        ],
-        "MID CIRCLE": [
-            { tier: "BASIC", maxPax: 7, price: 90000 },
-            { tier: "PLUS", maxPax: 7, price: 117000 },
-            { tier: "PREMIUM", maxPax: 7, price: 138000 }
-        ],
-        "PARTY GROUP": [
-            { tier: "BASIC", maxPax: 12, price: 125000 },
-            { tier: "PLUS", maxPax: 12, price: 174500 },
-            { tier: "PREMIUM", maxPax: 12, price: 213000 }
-        ],
-        "PARTY GROUP >12": [
-            { tier: "BASIC", maxPax: 13, price: 140000 }, { tier: "PLUS", maxPax: 13, price: 194000 }, { tier: "PREMIUM", maxPax: 13, price: 236000 },
-            { tier: "BASIC", maxPax: 14, price: 155000 }, { tier: "PLUS", maxPax: 14, price: 213500 }, { tier: "PREMIUM", maxPax: 14, price: 259000 },
-            { tier: "BASIC", maxPax: 15, price: 170000 }, { tier: "PLUS", maxPax: 15, price: 233000 }, { tier: "PREMIUM", maxPax: 15, price: 282000 },
-            { tier: "BASIC", maxPax: 16, price: 185000 }, { tier: "PLUS", maxPax: 16, price: 252500 }, { tier: "PREMIUM", maxPax: 16, price: 305000 },
-            { tier: "BASIC", maxPax: 17, price: 200000 }, { tier: "PLUS", maxPax: 17, price: 272000 }, { tier: "PREMIUM", maxPax: 17, price: 328000 },
-            { tier: "BASIC", maxPax: 18, price: 215000 }, { tier: "PLUS", maxPax: 18, price: 291500 }, { tier: "PREMIUM", maxPax: 18, price: 351000 },
-            { tier: "BASIC", maxPax: 19, price: 230000 }, { tier: "PLUS", maxPax: 19, price: 311000 }, { tier: "PREMIUM", maxPax: 19, price: 374000 },
-            { tier: "BASIC", maxPax: 20, price: 245000 }, { tier: "PLUS", maxPax: 20, price: 330500 }, { tier: "PREMIUM", maxPax: 20, price: 397000 },
-            { tier: "BASIC", maxPax: 21, price: 260000 }, { tier: "PLUS", maxPax: 21, price: 350000 }, { tier: "PREMIUM", maxPax: 21, price: 420000 },
-            { tier: "BASIC", maxPax: 22, price: 275000 }, { tier: "PLUS", maxPax: 22, price: 369500 }, { tier: "PREMIUM", maxPax: 22, price: 443000 },
-            { tier: "BASIC", maxPax: 23, price: 290000 }, { tier: "PLUS", maxPax: 23, price: 389000 }, { tier: "PREMIUM", maxPax: 23, price: 466000 },
-            { tier: "BASIC", maxPax: 24, price: 305000 }, { tier: "PLUS", maxPax: 24, price: 408500 }, { tier: "PREMIUM", maxPax: 24, price: 489000 },
-            { tier: "BASIC", maxPax: 25, price: 320000 }, { tier: "PLUS", maxPax: 25, price: 428000 }, { tier: "PREMIUM", maxPax: 25, price: 512000 }
-        ]
+    const selfPricingMaster = {
+        "SOLO / SQUAD": {
+            "BASIC": 50000, "PLUS": 59000, "PREMIUM": 66000
+        },
+        "MID CIRCLE": {
+            "BASIC": 90000, "PLUS": 117000, "PREMIUM": 138000
+        },
+        "PARTY GROUP": {
+            "BASIC": 125000, "PLUS": 174500, "PREMIUM": 213000
+        },
+        "PARTY GROUP >12": {
+            13: { BASIC: 140000, PLUS: 194000, PREMIUM: 236000 },
+            14: { BASIC: 155000, PLUS: 213500, PREMIUM: 259000 },
+            15: { BASIC: 170000, PLUS: 233000, PREMIUM: 282000 },
+            16: { BASIC: 185000, PLUS: 252500, PREMIUM: 305000 },
+            17: { BASIC: 200000, PLUS: 272000, PREMIUM: 328000 },
+            18: { BASIC: 215000, PLUS: 291500, PREMIUM: 351000 },
+            19: { BASIC: 230000, PLUS: 311000, PREMIUM: 374000 },
+            20: { BASIC: 245000, PLUS: 330500, PREMIUM: 397000 },
+            21: { BASIC: 260000, PLUS: 350000, PREMIUM: 420000 },
+            22: { BASIC: 275000, PLUS: 369500, PREMIUM: 443000 },
+            23: { BASIC: 290000, PLUS: 389000, PREMIUM: 466000 },
+            24: { BASIC: 305000, PLUS: 408500, PREMIUM: 489000 },
+            25: { BASIC: 320000, PLUS: 428000, PREMIUM: 512000 }
+        }
     };
 
     const daftarAddon = [
@@ -532,7 +543,7 @@
         if(cat === "formal") {
             adaPaket = document.querySelector('input[name="paketFormal"]:checked');
         } else {
-            adaPaket = document.getElementById("selfTierSelect").value;
+            adaPaket = true; // Self photo selalu valid karena ada input angka
         }
 
         if(!adaPaket){ alert(`Silakan pilih salah satu Paket Utama studio dulu kak!`); return; }
@@ -582,32 +593,74 @@
 
     function handleCategoryChange() {
         const cat = document.getElementById("paketCategorySelect").value;
-        const formalCont = document.getElementById("formalPackageContainer");
-        const selfCont = document.getElementById("selfPackageContainer");
+        const selfTypeWrapper = document.getElementById("selfTypeWrapper");
+        const tierCard = document.getElementById("tierCardWrapper");
+        const paxCard = document.getElementById("paxCardWrapper");
+        const formalCard = document.getElementById("formalCardWrapper");
 
-        if(cat === "formal") {
-            formalCont.classList.remove("hidden");
-            selfCont.classList.add("hidden");
+        if(cat === "self") {
+            selfTypeWrapper.classList.remove("hidden");
+            tierCard.classList.remove("hidden");
+            paxCard.classList.remove("hidden");
+            formalCard.classList.add("hidden");
+            handleSelfTypeChange();
         } else {
-            formalCont.classList.add("hidden");
-            selfCont.classList.remove("hidden");
-            updateSelfPackageOptions();
+            selfTypeWrapper.classList.add("hidden");
+            tierCard.classList.add("hidden");
+            paxCard.classList.add("hidden");
+            formalCard.classList.remove("hidden");
         }
         updateSummary();
     }
 
-    function updateSelfPackageOptions() {
+    function handleSelfTypeChange() {
         const typeSelect = document.getElementById("selfTypeSelect").value;
-        const tierSelect = document.getElementById("selfTierSelect");
-        tierSelect.innerHTML = "";
+        const paxInput = document.getElementById("paxInput");
+        const paxLabel = document.getElementById("paxLabel");
+        const paxInfoText = document.getElementById("paxInfoText");
 
-        const listOptions = selfPackageData[typeSelect] || [];
-        listOptions.forEach((opt, idx) => {
-            const el = document.createElement("option");
-            el.value = idx;
-            el.text = `${opt.tier} (Kapasitas: ${opt.maxPax} Orang) - ${formatRupiah(opt.price)}`;
-            tierSelect.appendChild(el);
-        });
+        if(typeSelect === "SOLO / SQUAD") {
+            paxInput.min = 1; paxInput.max = 3; paxInput.value = Math.min(Math.max(paxInput.value, 1), 3);
+            paxLabel.innerText = "Jumlah Orang (Maksimal 3 Orang)";
+            paxInfoText.innerText = "Paket ini berlaku untuk 1 hingga 3 orang.";
+        } else if(typeSelect === "MID CIRCLE") {
+            paxInput.min = 1; paxInput.max = 7; paxInput.value = Math.min(Math.max(paxInput.value, 1), 7);
+            paxLabel.innerText = "Jumlah Orang (Maksimal 7 Orang)";
+            paxInfoText.innerText = "Paket ini berlaku untuk 1 hingga 7 orang.";
+        } else if(typeSelect === "PARTY GROUP") {
+            paxInput.min = 1; paxInput.max = 12; paxInput.value = Math.min(Math.max(paxInput.value, 1), 12);
+            paxLabel.innerText = "Jumlah Orang (Maksimal 12 Orang)";
+            paxInfoText.innerText = "Paket ini berlaku untuk 1 hingga 12 orang.";
+        } else if(typeSelect === "PARTY GROUP >12") {
+            paxInput.min = 13; paxInput.max = 25; paxInput.value = Math.max(paxInput.value, 13);
+            paxLabel.innerText = "Jumlah Orang (13 - 25 Orang)";
+            paxInfoText.innerText = "Masukkan jumlah rombongan antara 13 sampai 25 orang.";
+        }
+        validateAndCalculate();
+    }
+
+    function handleTierChange() {
+        updateSummary();
+    }
+
+    function validateAndCalculate() {
+        const typeSelect = document.getElementById("selfTypeSelect").value;
+        const paxInput = document.getElementById("paxInput");
+        let val = parseInt(paxInput.value) || 1;
+
+        if(typeSelect === "SOLO / SQUAD") {
+            if(val > 3) paxInput.value = 3;
+            if(val < 1) paxInput.value = 1;
+        } else if(typeSelect === "MID CIRCLE") {
+            if(val > 7) paxInput.value = 7;
+            if(val < 1) paxInput.value = 1;
+        } else if(typeSelect === "PARTY GROUP") {
+            if(val > 12) paxInput.value = 12;
+            if(val < 1) paxInput.value = 1;
+        } else if(typeSelect === "PARTY GROUP >12") {
+            if(val > 25) paxInput.value = 25;
+            if(val < 13) paxInput.value = 13;
+        }
         updateSummary();
     }
 
@@ -627,16 +680,23 @@
             });
         } else {
             const typeSelect = document.getElementById("selfTypeSelect").value;
-            const idx = document.getElementById("selfTierSelect").value;
-            if(idx !== "") {
-                const selectedOpt = selfPackageData[typeSelect][idx];
-                if(selectedOpt) {
-                    currentGrandTotal += selectedOpt.price;
-                    let itemName = `Self Photo: ${typeSelect} - ${selectedOpt.tier} (${selectedOpt.maxPax} Org)`;
-                    sidebarPaketHTML += `<div class="summary-row item-line"><span>• ${itemName}</span><span>${formatRupiah(selectedOpt.price)}</span></div>`;
-                    paketOrderHTML += `<div class="r-row"><span>1x ${itemName}</span> <span>${formatRupiah(selectedOpt.price)}</span></div>`;
+            const tierSelect = document.getElementById("selfTierSelect").value;
+            const paxVal = parseInt(document.getElementById("paxInput").value) || 1;
+
+            let price = 0;
+            if(typeSelect === "PARTY GROUP >12") {
+                let safePax = Math.min(Math.max(paxVal, 13), 25);
+                if(selfPricingMaster[typeSelect][safePax]) {
+                    price = selfPricingMaster[typeSelect][safePax][tierSelect] || 0;
                 }
+            } else {
+                price = selfPricingMaster[typeSelect][tierSelect] || 0;
             }
+
+            currentGrandTotal += price;
+            let itemName = `Self Photo: ${typeSelect} - ${tierSelect} (${paxVal} Org)`;
+            sidebarPaketHTML += `<div class="summary-row item-line"><span>• ${itemName}</span><span>${formatRupiah(price)}</span></div>`;
+            paketOrderHTML += `<div class="r-row"><span>1x ${itemName}</span> <span>${formatRupiah(price)}</span></div>`;
         }
 
         daftarAddon.forEach(item => {
@@ -686,13 +746,9 @@
             });
         } else {
             const typeSelect = document.getElementById("selfTypeSelect").value;
-            const idx = document.getElementById("selfTierSelect").value;
-            if(idx !== "") {
-                const selectedOpt = selfPackageData[typeSelect][idx];
-                if(selectedOpt) {
-                    dbPaket.push(`1x Self Photo: ${typeSelect} - ${selectedOpt.tier} (${selectedOpt.maxPax} Org)`);
-                }
-            }
+            const tierSelect = document.getElementById("selfTierSelect").value;
+            const paxVal = document.getElementById("paxInput").value;
+            dbPaket.push(`1x Self Photo: ${typeSelect} - ${tierSelect} (${paxVal} Org)`);
         }
 
         daftarAddon.forEach(a => { if(document.getElementById(`chk_add_${a.id}`).checked) dbAddon.push(`${document.getElementById(`qty_add_${a.id}`).value}x ${a.name}`); });
