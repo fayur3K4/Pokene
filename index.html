@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking & Invoice - Potokene Self Photo Studio</title>
-    <!-- Library untuk export gambar -->
+    <title>Booking POTOKENE</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
+        /* TONE WARNA: Charcoal Dark & Lime Green */
         :root {
-            --bg-primary: #121212;
-            --bg-secondary: #1e1e1e;
+            --bg-primary: #141714;
+            --bg-secondary: #1f241f;
+            --accent-color: #cbfc21; 
+            --accent-hover: #b3e317;
             --text-main: #ffffff;
-            --text-muted: #aaaaaa;
-            --accent-color: #ffd700;
-            --accent-hover: #ffc700;
-            --border-color: #333333;
-            --card-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            --input-bg: #2a2a2a;
+            --text-muted: #9ba69f;
+            --border-color: #2f3832;
+            --card-shadow: 0 8px 24px rgba(0,0,0,0.6);
+            --input-bg: #272e29;
+            --error-color: #ff5252;
             --success-color: #4caf50;
         }
 
@@ -28,23 +29,24 @@
         header { text-align: center; margin-bottom: 35px; display: flex; flex-direction: row; align-items: center; gap: 20px; justify-content: center;}
         .logo-img { width: 100%; max-width: 180px; height: auto; object-fit: contain; flex-shrink: 0;}
         .logo-info { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; text-align: left;}
-        .logo-text { font-size: 2.2rem; font-weight: 700; letter-spacing: 1px; margin-top: 0; display: none; }
         .logo-info p { color: var(--accent-color); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 5px;}
         .contact-info { display: flex; flex-direction: column; gap: 5px; font-size: 0.9rem;}
         .map-link, .wa-link { color: var(--text-main); text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: bold; }
+        .map-link svg, .wa-link svg { color: var(--accent-color); flex-shrink: 0;}
         .map-link:hover, .wa-link:hover { color: var(--accent-color); }
-
-        @media(max-width: 768px) {
+        
+        @media (max-width: 600px) {
             header { flex-direction: column; text-align: center; }
             .logo-info { align-items: center; text-align: center; }
         }
 
         .step-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
-        .step3-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
-
-        @media(max-width: 768px) {
-            .step-layout, .step3-layout { grid-template-columns: 1fr; }
-            .summary-sidebar { position: static; }
+        .step3-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; } 
+        
+        .summary-sidebar { position: sticky; top: 40px; align-self: start; }
+        @media (max-width: 800px) { 
+            .step-layout, .step3-layout { grid-template-columns: 1fr; } 
+            .summary-sidebar { position: static; } 
         }
 
         .card { background-color: var(--bg-secondary); border-radius: 12px; padding: 30px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow); margin-bottom: 25px; }
@@ -52,9 +54,10 @@
 
         .form-control { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
         .form-control label { font-size: 0.9rem; color: var(--text-muted); }
-        input[type="text"], input[type="email"], textarea { background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; color: var(--text-main); font-size: 1rem; outline: none; transition: border 0.3s; width: 100%; }
+        input[type="text"], input[type="email"], select, textarea { background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; color: var(--text-main); font-size: 1rem; outline: none; transition: border 0.3s; width: 100%; }
+        select option { background-color: var(--bg-secondary); color: var(--text-main); }
         textarea { resize: vertical; min-height: 80px; }
-        input:focus, textarea:focus { border-color: var(--accent-color); }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent-color); }
 
         .phone-input-wrapper { display: flex; align-items: center; background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; transition: border 0.3s; }
         .phone-input-wrapper:focus-within { border-color: var(--accent-color); }
@@ -66,18 +69,18 @@
         #bookingDate { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 3; }
         #bookingDate:disabled { cursor: not-allowed; }
 
-        /* GRID JADWAL 3 KOLOM KONSUMEN */
         .slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-        .slot-btn { background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; border-radius: 6px; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
-        .slot-btn:hover:not(:disabled) { background-color: var(--accent-color); color: #000; border-color: var(--accent-color); }
-        .slot-btn.selected { background-color: var(--accent-color); color: #000; border-color: var(--accent-color); }
+        
+        .slot-btn { background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 12px 5px; border-radius: 6px; cursor: pointer; text-align: center; font-size: 0.85rem; transition: all 0.2s ease; font-weight: bold;}
+        .slot-btn:hover:not(:disabled) { border-color: var(--accent-color); }
+        .slot-btn.active { background-color: var(--accent-color); color: #000; border-color: var(--accent-color); }
         .slot-btn:disabled { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
         .loading-text { font-size: 0.85rem; color: var(--accent-color); margin-top: 8px; font-weight: 500; }
 
         .btn-primary { background-color: var(--accent-color); color: #000; border: none; width: 100%; padding: 15px; border-radius: 8px; font-size: 1.1rem; font-weight: 800; cursor: pointer; transition: background-color 0.2s; margin-top: 20px; }
         .btn-primary:hover { background-color: var(--accent-hover); }
         .btn-primary:disabled { background-color: #444; cursor: not-allowed; color: #888; }
-
+        
         .btn-download { background-color: #222; color: white; border: 1px solid #444; padding: 12px 15px; border-radius: 6px; font-size: 0.95rem; cursor: pointer; font-weight: bold; margin-top: 15px; width: 100%; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;}
         .btn-download:hover { background-color: #444; }
 
@@ -93,26 +96,35 @@
         .summary-details { margin-bottom: 20px; border-bottom: 1px dashed var(--border-color); padding-bottom: 15px; }
         .summary-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.95rem; }
         .summary-row.item-line { font-size: 0.85rem; color: var(--text-muted); padding-left: 10px; }
-
-        /* CSS INVOICE DI FRONT END */
-        .receipt-wrapper { background: #ffffff; color: #111111; padding: 30px; border-radius: 8px; max-width: 500px; margin: 0 auto 20px auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5); font-family: 'Courier New', Courier, monospace; }
-        .receipt-top { text-align: center; margin-bottom: 20px; border-bottom: 2px dashed #ccc; padding-bottom: 15px; }
-        .invoice-logo { width: 100%; max-width: 200px; height: auto; object-fit: contain; margin: 0 auto 10px auto; display: block; }
-        .invoice-address { font-size: 0.85rem; color: #333; line-height: 1.4; }
-        .r-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem; }
+        .summary-total { display: flex; justify-content: space-between; align-items: center; font-size: 1.3rem; font-weight: bold; color: var(--accent-color); margin-top: 15px; margin-bottom: 25px; }
+        
+        /* INVOICE DESIGN */
+        .receipt-wrapper { background-color: #f7f9f7; color: #111; max-width: 500px; margin: 0 auto 20px auto; border-radius: 8px; padding: 30px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .receipt-wrapper::after { content: ""; position: absolute; bottom: -10px; left: 0; right: 0; height: 10px; background-size: 20px 20px; background-image: radial-gradient(circle at 10px 10px, transparent 12px, #f7f9f7 13px); }
+        .r-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.9rem; }
         .r-bold { font-weight: bold; }
         .r-divider { border-top: 1px dashed #ccc; margin: 15px 0; }
         .receipt-section-title { font-size: 1rem; font-weight: bold; color: #111; margin-top: 15px; margin-bottom: 10px; }
-
-        .pay-options { display: flex; flex-direction: column; gap: 12px; }
-        .pay-radio { background: #fff; border: 2px solid #ccc; padding: 15px; border-radius: 8px; cursor: pointer; color: #000; transition: border-color 0.2s; }
-        .pay-radio:hover { border-color: #000; }
+        
+        .receipt-top { text-align: center; margin-bottom: 20px; border-bottom: 2px dashed #ccc; padding-bottom: 15px; }
+        .invoice-logo { width: 100%; max-width: 200px; height: auto; object-fit: contain; margin: 0 auto 10px auto; display: block; }
+        .invoice-address { font-size: 0.85rem; color: #333; line-height: 1.4; }
+        .invoice-address p { margin-bottom: 2px; font-weight: bold;}
+        .invoice-id-center { font-size: 1.15rem; font-weight: 800; color: #111; margin-top: 15px; letter-spacing: 1px; text-align: center;}
+        
+        /* PAYMENT STYLING */
+        .payment-options { background: #eaecea; padding: 15px; border-radius: 6px; margin-top: 20px; color: #111;}
+        .pay-radio { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd; cursor: pointer; }
+        .pay-radio:last-child { border-bottom: none; }
         .pay-radio input { accent-color: #000; transform: scale(1.2); margin-right: 10px; }
         .pay-radio div { display: flex; align-items: center; font-weight: 600; }
 
         /* QRIS DESIGN */
         .qris-box { background: white; border: 2px solid #ccc; border-radius: 8px; padding: 15px; text-align: center; margin-top: 15px; color: black; }
         .qris-image-wrapper { background: #f0f0f0; width: 220px; height: 220px; margin: 0 auto; display: flex; align-items: center; justify-content: center; border-radius: 6px; overflow: hidden; border: 1px solid #ddd; }
+        .qris-image-wrapper img { width: 100%; height: 100%; object-fit: contain; }
+        .dp-input-field { width: 100%; padding: 10px; font-size: 1.1rem; font-weight: bold; text-align: center; border: 2px solid #000; border-radius: 6px; background: #fff; color: #000; margin-top: 5px;}
+        
         .hidden { display: none !important; }
     </style>
 </head>
@@ -122,126 +134,137 @@
     <header id="mainHeader">
         <img src="https://plain-apac-prod-public.komododecks.com/202606/20/zbHRMBV2QC6K6nFHI5ld/image.png" alt="Logo Potokene" class="logo-img">
         <div class="logo-info">
-            <p>Self Photo Studio</p>
-            <div class="logo-text">POTOKENE</div>
+            <p>Self Photo Studio Pare</p>
             <div class="contact-info">
-                <a href="https://maps.app.goo.gl/example" target="_blank" class="map-link">📍 Jl. Studio Foto No. 123, Kota</a>
-                <a href="https://api.whatsapp.com/send?phone=6281338380100" target="_blank" class="wa-link">💬 WhatsApp Admin</a>
+                <a href="https://maps.app.goo.gl/YSiphY7Po1HTE1PM9" target="_blank" class="map-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
+                    Maps Studio
+                </a>
+                <a href="https://wa.me/6281338380100" target="_blank" class="wa-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.948h.083c4.368 0 7.928-3.558 7.929-7.926a7.883 7.883 0 0 0-2.331-5.674zm-3.36 10.399a.66.66 0 0 1-.264.137c-.12.032-.24.032-.36.032-.12 0-.24-.016-.36-.048l-.071-.02-.132-.036a.664.664 0 0 1-.228-.097.662.662 0 0 1-.168-.141l-.039-.039a.662.662 0 0 1-.132-.168.66.66 0 0 1-.115-.22l-.012-.035-.01-.031a.66.66 0 0 1-.033-.36c0-.12 0-.24.017-.36.012-.12.028-.24.045-.36.02-.12.037-.24.053-.36l.036-.201a.66.66 0 0 1 .132-.264.66.66 0 0 1 .168-.168.66.66 0 0 1 .228-.132l.024-.01a.66.66 0 0 1 .36-.049c.12 0 .24 0 .36.012.12.012.24.024.36.037.12.016.24.032.36.049h.036c.12 0 .24-.001.36-.016.12-.016.24-.032.36-.048.12-.017.24-.033.36-.049h.016a.66.66 0 0 1 .264.132.66.66 0 0 1 .168.168.66.66 0 0 1 .132.228l.008.016a.66.66 0 0 1 .041.36c.004.12 0 .24 0 .36.004.12 0 .24 0 .36l.004.22c.004.12 0 .24 0 .36-.004.12 0 .24 0 .36-.004.12 0 .24 0 .36.004.12.012.24.02.36l.004.22a.663.663 0 0 0 .115.22c.036.072.08.132.132.18l.028.024a.663.663 0 0 0 .228.112.66.66 0 0 0 .36.02c.12-.008.24-.016.36-.024l.112-.008c.12-.004.24-.004.36-.004.12 0 .24-.004.36-.008h.036a.664.664 0 0 0 .264-.132.663.663 0 0 0 .168-.168.66.66 0 0 0 .132-.228.663.663 0 0 0 .04-.36c.004-.12 0-.24.004-.36-.004-.12-.008-.24-.012-.36l-.004-.22a.663.663 0 0 0-.115-.22zm-6.2 8.76a.66.66 0 0 0 .264-.132.662.662 0 0 0 .168-.168.66.66 0 0 0 .132-.228.663.663 0 0 0 .041-.36c.004-.12 0-.24.004-.36.004-.12.008-.24.012-.36l.004-.22a.663.663 0 0 0-.115-.22.66.66 0 0 0-.168-.168.662.662 0 0 0-.228-.112.66.66 0 0 0-.36-.036.66.66 0 0 0-.36.036.66.66 0 0 0-.228.112.66.66 0 0 0-.168.168.663.663 0 0 0-.132.228l-.004.012a.663.663 0 0 0-.04.36c-.004.12 0 .24-.004.36-.004.12-.012.24-.02.36l-.004.22a.663.663 0 0 0 .115.22zm.44-7.16c-.12-.012-.24-.024-.36-.036-.12-.012-.24-.024-.36-.036a.66.66 0 0 0-.228.096.66.66 0 0 0-.168.14l-.012.012a.662.662 0 0 0-.132.168.66.66 0 0 0-.115.22c-.004.12 0 .24 0 .36.004.12 0 .24 0 .36l.004.22c.004.12 0 .24 0 .36-.004.12 0 .24 0 .36.004.12.012.24.02.36l.004.22a.662.662 0 0 0 .115.22.663.663 0 0 0 .168.168l.02.016a.66.66 0 0 0 .228.112.66.66 0 0 0 .36.036.66.66 0 0 0 .36-.036l.016-.016a.66.66 0 0 0 .168-.168zm6.6-.84c-.12-.016-.24-.032-.36-.048-.12-.016-.24-.032-.36-.048a.66.66 0 0 0-.228.096.663.663 0 0 0-.168.14l-.012.012a.662.662 0 0 0-.132.168.66.66 0 0 0-.115.22c-.004.12 0 .24.004.36.004.12.008.24.012.36l.008.22c.004.12.012.24.02.36.008.12.016.24.024.36l.012.232a.662.662 0 0 0 .115.22.663.663 0 0 0 .168.168l.02.016a.66.66 0 0 0 .228.112.66.66 0 0 0 .36.036.66.66 0 0 0 .36-.036l.016-.016a.66.66 0 0 0 .168-.168z"/></svg>
+                    WA Admin
+                </a>
             </div>
         </div>
     </header>
 
-    <!-- STEP 1: Pilih Tanggal & Jam -->
     <div id="step1">
         <div class="card" style="max-width: 600px; margin: 0 auto;">
             <h2>Pilih Jadwal Foto Kamu</h2>
             <div class="form-control">
-                <label>Tanggal Sesi Foto:</label>
-                <div class="date-wrapper" id="dateInputWrapper">
-                    <input type="text" id="fakeDate" value="Pilih Tanggal Studio..." readonly>
-                    <input type="date" id="bookingDate" onchange="handleDateChange()">
+                <div class="date-wrapper" id="dateInputWrapper" onclick="try{document.getElementById('bookingDate').showPicker()}catch(e){}">
+                    <input type="text" id="fakeDate" placeholder="Tanggal Booking" readonly>
+                    <input type="date" id="bookingDate" onchange="handleDateChange()" disabled>
                 </div>
-                <div id="loadingSlots" class="loading-text hidden">⏳ Memuat jadwal tersedia...</div>
+                <div id="loadingSlots" class="loading-text">Menghubungkan ke jadwal server...</div>
             </div>
-            
-            <div style="margin-top: 25px;">
-                <label style="font-size: 0.9rem; color: var(--text-muted);">Pilih Jam Sesi (Durasi 15 Menit):</label>
-                <div id="slotsContainer" class="slots-grid">
-                    <div style="grid-column: span 3; text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 20px;">Silakan pilih tanggal terlebih dahulu di atas.</div>
-                </div>
+            <div id="timeSelectionArea" class="hidden">
+                <h2 style="margin-top: 30px; border-left: none; padding-left: 0;">Pilih Sesi Jam</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: -15px; margin-bottom: 15px;">*Hanya bisa pilih 1 sesi waktu (Durasi 15 Menit)</p>
+                <div class="slots-grid" id="slotsContainer"></div>
             </div>
-
-            <button class="btn-primary" id="btnNextToStep2" disabled onclick="goToStep2()">Lanjut ke Pengisian Data & Paket →</button>
+            <button class="btn-primary" id="btnNext" onclick="goToStep2()" disabled>Selanjutnya</button>
         </div>
     </div>
 
-    <!-- STEP 2: Identitas & Pilih Paket/Add-on -->
     <div id="step2" class="hidden">
-        <button class="btn-back" onclick="goToStep1()">← Kembali Pilih Jadwal</button>
         <div class="step-layout">
             <div class="main-form">
                 <div class="card">
-                    <h2>Identitas Pemesan</h2>
-                    <div class="form-control">
-                        <label>Nama Lengkap / Panggilan:</label>
-                        <input type="text" id="custName" placeholder="Contoh: Budi Santoso">
-                    </div>
-                    <div class="form-control">
-                        <label>Nomor WhatsApp:</label>
-                        <div class="phone-input-wrapper">
-                            <span class="phone-prefix">+62</span>
-                            <input type="text" id="custPhone" placeholder="81234567890">
+                    <h2>Informasi Pemesan <button class="btn-back" onclick="goToStep1()" style="margin-bottom:0; display:inline;">← Ubah Jadwal</button></h2>
+                    <div class="form-group">
+                        <div class="form-control"><label>Nama Lengkap *</label><input type="text" id="custName" required></div>
+                        <div class="form-control"><label>Email *</label><input type="email" id="custEmail" required></div>
+                        <div class="form-control">
+                            <label>Nomor HP / WA *</label>
+                            <div class="phone-input-wrapper">
+                                <span class="phone-prefix">+62</span>
+                                <input type="tel" id="custPhone" placeholder="8123456789" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-control">
-                        <label>Catatan Tambahan (Opsional):</label>
-                        <textarea id="custMessage" placeholder="Pesan khusus untuk admin atau fotografer..."></textarea>
+                        <div class="form-control"><label>Pesan Tambahan (Opsional)</label><textarea id="custMessage"></textarea></div>
                     </div>
                 </div>
-
                 <div class="card">
                     <h2>Pilih Paket Utama</h2>
-                    <table class="item-table" id="paketTable"></table>
+                    <div class="form-control">
+                        <label>Kategori Paket</label>
+                        <select id="paketCategorySelect" onchange="handleCategoryChange()">
+                            <option value="formal">Photo Formal</option>
+                            <option value="self">Self Photo</option>
+                        </select>
+                    </div>
+                    <div id="formalPackageContainer">
+                        <table class="item-table" id="formalPaketTable"><tbody></tbody></table>
+                    </div>
+                    <div id="selfPackageContainer" class="hidden">
+                        <div class="form-control" style="margin-top: 15px;">
+                            <label>Jenis Self Photo</label>
+                            <select id="selfTypeSelect" onchange="updateSelfPackageOptions()">
+                                <option value="SOLO / SQUAD">SOLO / SQUAD (Max 3 orang)</option>
+                                <option value="MID CIRCLE">MID CIRCLE (Max 7 orang)</option>
+                                <option value="PARTY GROUP">PARTY GROUP (Max 12 orang)</option>
+                                <option value="PARTY GROUP >12">PARTY GROUP &gt;12 (13 - 25 orang)</option>
+                            </select>
+                        </div>
+                        <div class="form-control" style="margin-top: 10px;">
+                            <label>Pilihan Paket & Tier</label>
+                            <select id="selfTierSelect" onchange="updateSummary()">
+                                <!-- Dihasilkan secara dinamis via JS -->
+                            </select>
+                        </div>
+                    </div>
                 </div>
-
                 <div class="card">
-                    <h2>Pilih Ekstra (Add-On) Opsional</h2>
-                    <table class="item-table" id="addonTable"></table>
+                    <h2>Pilih Ekstra (Add-On)</h2>
+                    <table class="item-table" id="addonTable"><tbody></tbody></table>
                 </div>
             </div>
-
             <div class="summary-sidebar">
-                <div class="card" style="position: sticky; top: 20px;">
+                <div class="card">
                     <h2>Rincian Sementara</h2>
                     <div class="summary-details">
-                        <div class="summary-row"><span>Tanggal:</span><strong id="sumDate">-</strong></div>
-                        <div class="summary-row"><span>Sesi Jam:</span><strong id="sumSlots">-</strong></div>
+                        <div class="summary-row"><span>Tanggal:</span><span id="sumDate" style="font-weight:bold;">-</span></div>
+                        <div class="summary-row"><span>Sesi Waktu:</span><span id="sumSlots" style="color:var(--accent-color); font-weight:bold;">-</span></div>
                     </div>
-                    <div class="summary-details" id="sumItemsContainer">
-                        <div style="color: var(--text-muted); font-size: 0.9rem;">Belum ada paket dipilih.</div>
-                    </div>
-                    <div class="summary-row" style="font-size: 1.1rem; margin-top: 15px;">
-                        <span>Total Biaya:</span>
-                        <strong id="grandTotalDisplay" style="color: var(--accent-color);">Rp 0</strong>
-                    </div>
-                    <button class="btn-primary" onclick="goToStep3()">Lanjut ke Pembayaran →</button>
+                    <div class="summary-details" id="sumItemsContainer"></div>
+                    <div class="summary-total"><span>Total:</span><span id="grandTotalDisplay">Rp 0</span></div>
+                    <button class="btn-primary" onclick="goToStep3()" style="margin-top: 0;">Lanjut ke Pembayaran</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- STEP 3: Pembayaran -->
     <div id="step3" class="hidden">
         <button class="btn-back" onclick="goToStep2()">← Kembali Edit Pesanan</button>
+        
         <div class="step3-layout">
             <div class="summary-sidebar">
                 <div class="card">
-                    <h2>Ringkasan Pesanan Kamu</h2>
+                    <h2>Rincian Pesanan Kamu</h2>
                     <div class="summary-details">
-                        <div class="summary-row"><span>Tanggal:</span><strong id="sumDatePay">-</strong></div>
-                        <div class="summary-row"><span>Sesi Jam:</span><strong id="sumSlotsPay">-</strong></div>
+                        <div class="summary-row"><span>Tanggal:</span><span id="sumDatePay" style="font-weight:bold;">-</span></div>
+                        <div class="summary-row"><span>Sesi Waktu:</span><span id="sumSlotsPay" style="color:var(--accent-color); font-weight:bold;">-</span></div>
                     </div>
                     <div class="summary-details" id="sumItemsContainerPay"></div>
-                    <div class="summary-row" style="font-size: 1.1rem; margin-top: 15px;">
-                        <span>Total Tagihan:</span>
-                        <strong id="grandTotalDisplayPay" style="color: var(--accent-color);">Rp 0</strong>
-                    </div>
+                    <div class="summary-total"><span>Total:</span><span id="grandTotalDisplayPay">Rp 0</span></div>
                 </div>
             </div>
 
             <div class="main-form">
                 <div class="card" style="margin-bottom: 0;">
                     <h2 style="color:var(--accent-color); border:none; justify-content:center; margin-bottom: 5px;">Pilih Metode Pembayaran</h2>
-                    <div class="pay-options">
-                        <label class="pay-radio"><div><input type="radio" name="payType" value="DP Bebas" checked onchange="handlePaymentMethodChange()"> DP Bebas via QRIS</div></label>
-                        <label class="pay-radio"><div><input type="radio" name="payType" value="Pelunasan QRIS" onchange="handlePaymentMethodChange()"> Pelunasan Penuh via QRIS</div></label>
+                    <div class="payment-options">
+                        <label class="pay-radio"><div><input type="radio" name="payType" value="DP Bebas" checked onchange="handlePaymentMethodChange()"> Bayar DP Bebas via QRIS</div></label>
+                        <label class="pay-radio"><div><input type="radio" name="payType" value="Pelunasan QRIS" onchange="handlePaymentMethodChange()"> Lunas via QRIS (100%)</div></label>
                         <label class="pay-radio"><div><input type="radio" name="payType" value="Bayar di Tempat" onchange="handlePaymentMethodChange()"> Bayar Cash di Kasir Studio</div></label>
                     </div>
 
                     <div id="customDpWrapper" style="margin-top: 20px; background:#fff; padding:15px; border-radius:8px;">
-                        <label style="font-size: 0.9rem; font-weight: bold; color:#111;">Tentukan Nominal DP Kamu (Minimal Rp 20.000):</label>
+                        <label style="font-size: 0.9rem; font-weight: bold; color:#111;">Tentukan Nominal DP Kamu (Rp):</label>
                         <div style="display: flex; gap: 10px;">
-                            <input type="number" id="customDpAmount" value="20000" min="20000" style="background:#f0f0f0; border:1px solid #ccc; color:#000;" oninput="generateQrisClick()">
+                            <input type="number" id="customDpAmount" class="dp-input-field" value="25000" min="1">
+                            <button class="btn-primary" style="margin-top: 5px; padding: 0 20px; width: auto;" onclick="generateQrisClick()">Buka QRIS</button>
                         </div>
                     </div>
 
@@ -254,12 +277,8 @@
                         <div style="font-weight: 800; font-size: 1.1rem;">QRIS LIVIN MERCHANT</div>
                         <div style="font-size: 0.75rem; color: #666; font-weight: bold; margin-bottom: 10px;">POTOKENE SELF PHOTO STUDIO</div>
                         <div id="qrisResultArea" class="hidden">
-                            <div class="qris-image-wrapper"><img id="qrisImg" src="images/qris.jpeg" alt="Scan QRIS Potokene"></div>
+                            <div class="qris-image-wrapper"><img id="qrisImg" src="qris.jpg" alt="Scan QRIS Potokene"></div>
                             <div style="font-size: 1.3rem; font-weight: 800; margin-top: 10px;" id="qrisDisplayAmount">Rp 0</div>
-                            <button class="btn-download" onclick="downloadGambarQris()" style="margin-top: 12px; max-width: 220px; margin-left: auto; margin-right: auto; padding: 10px; font-size: 0.85rem;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
-                                Download QRIS
-                            </button>
                         </div>
                     </div>
 
@@ -269,25 +288,26 @@
         </div>
     </div>
 
-    <!-- STEP 4: Invoice Final -->
     <div id="step4" class="hidden">
         <div class="receipt-wrapper" id="invoiceArea">
             <div class="receipt-top">
                 <img src="https://plain-apac-prod-public.komododecks.com/202606/20/zbHRMBV2QC6K6nFHI5ld/image.png" alt="Logo Potokene" class="invoice-logo">
                 <div class="invoice-address">
-                    <strong>POTOKENE SELF PHOTO STUDIO</strong><br>
-                    Jl. Studio Foto No. 123, Kota<br>
-                    WhatsApp: 0813-3838-0100
+                    <p>Jl. Kemuning 9A, Pare, Kampung Inggris</p>
+                    <p>WA: 6281338380100</p>
+                    <p>IG: potokene.id</p>
                 </div>
+                <div class="invoice-id-center" id="invTrxId"></div>
             </div>
-            <div style="font-size: 0.9rem;">
-                <div class="r-row"><span>ID Transaksi:</span><strong id="invTrxId">-</strong></div>
-                <div class="r-row"><span>Nama Pemesan:</span><strong id="invName">-</strong></div>
-                <div class="r-row"><span>No WhatsApp:</span><strong id="invPhone">-</strong></div>
-                <div class="r-row"><span>Tanggal Foto:</span><strong id="invDate">-</strong></div>
-                <div class="r-row"><span>Sesi Jam:</span><strong id="invSlots">-</strong></div>
-
+            
+            <div class="receipt-body">
+                <div class="r-row"><span class="r-bold">Nama:</span> <span id="invName"></span></div>
+                <div class="r-row"><span class="r-bold">No. HP:</span> <span id="invPhone"></span></div>
                 <div class="r-divider"></div>
+                <div class="r-row"><span class="r-bold">Tgl Booking:</span> <span id="invBookDate"></span></div>
+                <div class="r-row"><span class="r-bold">Sesi Waktu:</span> <span id="invSlots" style="color: #444; font-weight: bold; text-align: right;"></span></div>
+                <div class="r-divider"></div>
+                
                 <div id="invPaketSection"><div class="receipt-section-title">Item Paket:</div><div id="invPaketArea"></div></div>
                 <div id="invAddonSection" class="hidden"><div class="receipt-section-title">Ekstra (Add-On):</div><div id="invAddonArea"></div></div>
 
@@ -300,485 +320,521 @@
         <div style="max-width: 500px; margin: 0 auto;">
             <button class="btn-download" id="btnDownload" onclick="downloadInvoiceGambar()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
-                Download Invoice (Gambar)
+                Download Gambar Invoice
             </button>
-            <button class="btn-primary" onclick="bukaWhatsAppDanMintaResi()" style="background-color: #25D366; color: white; margin-top: 15px;">
-                💬 Konfirmasi Booking ke WhatsApp
-            </button>
+            <p style="font-size:0.8rem; text-align:center; color:var(--text-muted); margin-top:8px; margin-bottom:20px;">*Wajib disave untuk bukti ke studio nanti.</p>
+            
+            <button class="btn-primary" id="btnWhatsApp" onclick="bukaWhatsAppDanMintaResi()">Konfirmasi & Kirim WA Admin</button>
         </div>
     </div>
+
 </div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxh2gwKPwfP-j7D594-S2RTf7HKtzYXefllanC6P55IJbUSS-Kv_o8BBwaoUlxZoO0/exec'; 
+    // URL SAKTI APPS SCRIPT
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxh2gwKPwfP-j7D594-S2RTf7HKtzYXefllanC6P55IJbUSS-Kv_o8BBwaoUlxZoO0/exec'; 
 
-const timeSlots = ["10.00","10.30","11.00","11.30","12.00","12.30","13.00","13.30","14.00","14.30","15.00","15.30","16.00","16.30","17.00","17.30","18.00","18.30","19.00","19.30","20.00"];
+    const timeSlots = ["10.00","10.30","11.00","11.30","12.00","12.30","13.00","13.30","14.00","14.30","15.00","15.30","16.00","16.30","17.00","17.30","18.00","18.30","19.00","19.30","20.00"];
+    
+    const daftarFormal = [
+        {id:"f1", name:"Pas Foto", price:35000},
+        {id:"f2", name:"Foto Visa", price:50000},
+        {id:"f3", name:"Foto Personal Branding", price:75000},
+        {id:"f4", name:"Couple Blue", price:120000}
+    ];
 
-const daftarPaket = [
-    // PHOTO FORMAL
-    { id: "pf1", name: "Pas Foto", price: 35000, category: "Formal" },
-    { id: "pf2", name: "Foto Visa", price: 50000, category: "Formal" },
-    { id: "pf3", name: "Foto Personal Branding", price: 75000, category: "Formal" },
-    { id: "pf4", name: "Couple Blue", price: 120000, category: "Formal" },
-
-    // SELF PHOTO: SOLO / SQUAD
-    { id: "ss_basic", name: "Solo / Squad - Basic (3 Org)", price: 50000, category: "Self Photo" },
-    { id: "ss_plus", name: "Solo / Squad - Plus (3 Org)", price: 59000, category: "Self Photo" },
-    { id: "ss_prem", name: "Solo / Squad - Premium (3 Org)", price: 66000, category: "Self Photo" },
-
-    // SELF PHOTO: MID CIRCLE
-    { id: "mc_basic", name: "Mid Circle - Basic (7 Org)", price: 90000, category: "Self Photo" },
-    { id: "mc_plus", name: "Mid Circle - Plus (7 Org)", price: 117000, category: "Self Photo" },
-    { id: "mc_prem", name: "Mid Circle - Premium (7 Org)", price: 138000, category: "Self Photo" },
-
-    // SELF PHOTO: PARTY GROUP
-    { id: "pg_basic", name: "Party Group - Basic (12 Org)", price: 125000, category: "Self Photo" },
-    { id: "pg_plus", name: "Party Group - Plus (12 Org)", price: 174500, category: "Self Photo" },
-    { id: "pg_prem", name: "Party Group - Premium (12 Org)", price: 213000, category: "Self Photo" },
-
-    // PARTY GROUP > 12 (13 - 25 orang)
-    { id: "p13_b", name: "Party Group (13 Org) - Basic", price: 140000, category: "Self Photo" },
-    { id: "p13_p", name: "Party Group (13 Org) - Plus", price: 194000, category: "Self Photo" },
-    { id: "p13_pr", name: "Party Group (13 Org) - Premium", price: 236000, category: "Self Photo" },
-
-    { id: "p14_b", name: "Party Group (14 Org) - Basic", price: 155000, category: "Self Photo" },
-    { id: "p14_p", name: "Party Group (14 Org) - Plus", price: 213500, category: "Self Photo" },
-    { id: "p14_pr", name: "Party Group (14 Org) - Premium", price: 259000, category: "Self Photo" },
-
-    { id: "p15_b", name: "Party Group (15 Org) - Basic", price: 170000, category: "Self Photo" },
-    { id: "p15_p", name: "Party Group (15 Org) - Plus", price: 233000, category: "Self Photo" },
-    { id: "p15_pr", name: "Party Group (15 Org) - Premium", price: 282000, category: "Self Photo" },
-
-    { id: "p16_b", name: "Party Group (16 Org) - Basic", price: 185000, category: "Self Photo" },
-    { id: "p16_p", name: "Party Group (16 Org) - Plus", price: 252500, category: "Self Photo" },
-    { id: "p16_pr", name: "Party Group (16 Org) - Premium", price: 305000, category: "Self Photo" },
-
-    { id: "p17_b", name: "Party Group (17 Org) - Basic", price: 200000, category: "Self Photo" },
-    { id: "p17_p", name: "Party Group (17 Org) - Plus", price: 272000, category: "Self Photo" },
-    { id: "p17_pr", name: "Party Group (17 Org) - Premium", price: 328000, category: "Self Photo" },
-
-    { id: "p18_b", name: "Party Group (18 Org) - Basic", price: 215000, category: "Self Photo" },
-    { id: "p18_p", name: "Party Group (18 Org) - Plus", price: 291500, category: "Self Photo" },
-    { id: "p18_pr", name: "Party Group (18 Org) - Premium", price: 351000, category: "Self Photo" },
-
-    { id: "p19_b", name: "Party Group (19 Org) - Basic", price: 230000, category: "Self Photo" },
-    { id: "p19_p", name: "Party Group (19 Org) - Plus", price: 311000, category: "Self Photo" },
-    { id: "p19_pr", name: "Party Group (19 Org) - Premium", price: 374000, category: "Self Photo" },
-
-    { id: "p20_b", name: "Party Group (20 Org) - Basic", price: 245000, category: "Self Photo" },
-    { id: "p20_p", name: "Party Group (20 Org) - Plus", price: 330500, category: "Self Photo" },
-    { id: "p20_pr", name: "Party Group (20 Org) - Premium", price: 397000, category: "Self Photo" },
-
-    { id: "p21_b", name: "Party Group (21 Org) - Basic", price: 260000, category: "Self Photo" },
-    { id: "p21_p", name: "Party Group (21 Org) - Plus", price: 350000, category: "Self Photo" },
-    { id: "p21_pr", name: "Party Group (21 Org) - Premium", price: 420000, category: "Self Photo" },
-
-    { id: "p22_b", name: "Party Group (22 Org) - Basic", price: 275000, category: "Self Photo" },
-    { id: "p22_p", name: "Party Group (22 Org) - Plus", price: 369500, category: "Self Photo" },
-    { id: "p22_pr", name: "Party Group (22 Org) - Premium", price: 443000, category: "Self Photo" },
-
-    { id: "p23_b", name: "Party Group (23 Org) - Basic", price: 290000, category: "Self Photo" },
-    { id: "p23_p", name: "Party Group (23 Org) - Plus", price: 389000, category: "Self Photo" },
-    { id: "p23_pr", name: "Party Group (23 Org) - Premium", price: 466000, category: "Self Photo" },
-
-    { id: "p24_b", name: "Party Group (24 Org) - Basic", price: 305000, category: "Self Photo" },
-    { id: "p24_p", name: "Party Group (24 Org) - Plus", price: 408500, category: "Self Photo" },
-    { id: "p24_pr", name: "Party Group (24 Org) - Premium", price: 489000, category: "Self Photo" },
-
-    { id: "p25_b", name: "Party Group (25 Org) - Basic", price: 320000, category: "Self Photo" },
-    { id: "p25_p", name: "Party Group (25 Org) - Plus", price: 428000, category: "Self Photo" },
-    { id: "p25_pr", name: "Party Group (25 Org) - Premium", price: 512000, category: "Self Photo" }
-];
-
-const daftarAddon = [
-    { id: "a1", name: "SPOTLIGHT", price: 25000 },
-    { id: "a2", name: "PERSONIL", price: 15000 },
-    { id: "a3", name: "DURASI (5 MNT)", price: 10000 },
-    { id: "a4", name: "CETAK 4R", price: 10000 },
-    { id: "a5", name: "COSTUME ANIMAL", price: 10000 },
-    { id: "a6", name: "PENGARAH GAYA", price: 20000 },
-    { id: "a7", name: "KEYCHAIN", price: 10000 },
-    { id: "a9", name: "PIGURA 10RS", price: 70000 },
-    { id: "a10", name: "PIGURA 4R", price: 25000 }
-];
-
-let selectedDate = "", selectedSlotsArray = [], currentGrandTotal = 0;
-let globalBookedData = {}; let currentTrxId = ""; 
-let base64File = ""; let mimeType = "";
-
-document.addEventListener("DOMContentLoaded", () => {
-    const inputBukti = document.getElementById('buktiTransfer');
-    if(inputBukti) {
-        inputBukti.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if(file) {
-                if(file.size > 2 * 1024 * 1024) {
-                    alert("Ukuran file maksimal 2MB!");
-                    inputBukti.value = ""; return;
-                }
-                mimeType = file.type;
-                const reader = new FileReader();
-                reader.onload = function(uploadEvt) {
-                    base64File = uploadEvt.target.result.split(',')[1];
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-});
-
-function formatRupiah(a){ return "Rp "+parseInt(a).toLocaleString('id-ID'); }
-
-function generateTrxId() {
-    const d = new Date();
-    const yy = String(d.getFullYear()).slice(-2);
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const dd = String(d.getDate()).padStart(2, '0');
-    const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase();
-    return `PTK-${yy}${mm}${dd}-${randomStr}`;
-}
-
-function formatTanggalIndo(dateStr) {
-    const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-    const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-    const d = new Date(dateStr);
-    return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-}
-
-function fetchBookedSlots() {
-    const loader = document.getElementById("loadingSlots");
-    const bDate = document.getElementById("bookingDate");
-    const bWrapper = document.getElementById("dateInputWrapper");
-
-    loader.classList.remove("hidden");
-    bDate.disabled = true; bWrapper.style.opacity = "0.4"; bWrapper.style.pointerEvents = "none";
-
-    fetch(SCRIPT_URL + "?action=getBookings")
-    .then(res => res.json())
-    .then(data => {
-        globalBookedData = data || {};
-        loader.classList.add("hidden");
-        bDate.disabled = false; bWrapper.style.opacity = "1"; bWrapper.style.pointerEvents = "auto";
-        handleDateChange();
-    })
-    .catch(err => {
-        console.error(err);
-        loader.classList.add("hidden");
-        bDate.disabled = false; bWrapper.style.opacity = "1"; bWrapper.style.pointerEvents = "auto";
-    });
-}
-
-function handleDateChange(){
-    selectedDate = document.getElementById("bookingDate").value;
-    if(selectedDate){
-        document.getElementById("fakeDate").value = formatTanggalIndo(selectedDate);
-        renderSlots(selectedDate, selectedDate);
-    }
-}
-
-function renderSlots(dStr, keyTanggal){
-    const container = document.getElementById("slotsContainer");
-    container.innerHTML = ""; selectedSlotsArray = [];
-    document.getElementById("btnNextToStep2").disabled = true;
-
-    const now = new Date(), sel = new Date(dStr), isToday = sel.toDateString() === now.toDateString();
-    let lakuDiTanggalIni = globalBookedData[keyTanggal] || {};
-
-    timeSlots.forEach(s => {
-        let [h, m] = s.split('.').map(Number);
-        let jamAkhir = h, menitAkhir = m + 15;
-        if(menitAkhir >= 60) { jamAkhir += 1; menitAkhir -= 60; }
-        let jamAkhirStr = String(jamAkhir).padStart(2,'0') + "." + String(menitAkhir).padStart(2,'0');
-        let fullTextSlot = `${s} - ${jamAkhirStr}`;
-
-        let btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "slot-btn";
-        btn.innerText = s;
-
-        let isPast = isToday && (h < now.getHours() || (h === now.getHours() && m <= now.getMinutes()));
-        let isAlreadyBooked = lakuDiTanggalIni[fullTextSlot] !== undefined;
-
-        if(isPast || isAlreadyBooked) {
-            btn.disabled = true; 
-            if(isAlreadyBooked && lakuDiTanggalIni[fullTextSlot].status === "BLOKIR") {
-                btn.style.backgroundColor = "#ff4d4d"; btn.style.color = "#fff";
-            }
-        }
-
-        btn.onclick = () => {
-            document.querySelectorAll(".slot-btn").forEach(b => b.classList.remove("selected"));
-            btn.classList.add("selected");
-            selectedSlotsArray = [fullTextSlot];
-            document.getElementById("btnNextToStep2").disabled = false;
-        };
-        container.appendChild(btn);
-    });
-}
-
-function goToStep1(){ hideSteps(); document.getElementById("step1").classList.remove("hidden"); }
-function goToStep2(){ 
-    hideSteps(); document.getElementById("step2").classList.remove("hidden");
-    document.getElementById("sumDate").innerText = formatTanggalIndo(selectedDate);
-    document.getElementById("sumSlots").innerText = selectedSlotsArray.join(", ");
-    updateSummary(); window.scrollTo(0,0);
-}
-
-function goToStep3(){
-    if(!document.getElementById("custName").value || !document.getElementById("custPhone").value){ 
-        alert("Isi nama dan nomer WA dulu bro!"); return; 
-    }
-    let adaPaket = document.querySelector('input[name="paketUtama"]:checked');
-    if(!adaPaket){ alert(`Silakan pilih salah satu Paket Utama studio dulu kak!`); return; }
-
-    currentTrxId = generateTrxId();
-    hideSteps(); document.getElementById("step3").classList.remove("hidden");
-
-    document.getElementById("sumDatePay").innerText = document.getElementById("sumDate").innerText;
-    document.getElementById("sumSlotsPay").innerHTML = document.getElementById("sumSlots").innerHTML;
-    document.getElementById("sumItemsContainerPay").innerHTML = document.getElementById("sumItemsContainer").innerHTML;
-    document.getElementById("grandTotalDisplayPay").innerText = document.getElementById("grandTotalDisplay").innerText;
-
-    handlePaymentMethodChange(); window.scrollTo(0,0);
-}
-
-function handlePaymentMethodChange() {
-    const payType = document.querySelector('input[name="payType"]:checked').value;
-    const qrisBox = document.getElementById("qrisContainer");
-    const qrisResult = document.getElementById("qrisResultArea");
-    const dpWrapper = document.getElementById("customDpWrapper");
-    const uploadWrapper = document.getElementById("uploadResiWrapper");
-
-    if (payType === "Bayar di Tempat") {
-        qrisBox.classList.add("hidden"); qrisResult.classList.add("hidden");
-        dpWrapper.classList.add("hidden"); uploadWrapper.classList.add("hidden");
-    } else {
-        qrisBox.classList.remove("hidden"); qrisResult.classList.remove("hidden");
-        uploadWrapper.classList.remove("hidden");
-        if(payType === "Pelunasan QRIS") {
-            dpWrapper.classList.add("hidden");
-            document.getElementById("qrisDisplayAmount").innerText = formatRupiah(currentGrandTotal);
-        } else {
-            dpWrapper.classList.remove("hidden");
-            generateQrisClick();
-        }
-    }
-}
-
-function generateQrisClick() {
-    let nominalDP = parseInt(document.getElementById("customDpAmount").value) || 0;
-    if(nominalDP < 20000) { alert("Minimal DP adalah Rp 20.000 ya kak!"); return; }
-    document.getElementById("qrisDisplayAmount").innerText = formatRupiah(nominalDP);
-    document.getElementById("qrisImg").src = "images/qris.jpeg";
-}
-
-function updateSummary(isInvoice = false){
-    currentGrandTotal = 0; let paketOrderHTML = ""; let addonOrderHTML = "";
-    let sidebarPaketHTML = ""; let sidebarAddonHTML = "";
-
-    daftarPaket.forEach(item => {
-        const chk = document.getElementById(`chk_pkt_${item.id}`).checked;
-        if(chk){
-            currentGrandTotal += item.price;
-            sidebarPaketHTML += `<div class="summary-row item-line"><span>${item.name}</span><span>${formatRupiah(item.price)}</span></div>`;
-            paketOrderHTML += `<div class="r-row"><span>${item.name}</span><span>${formatRupiah(item.price)}</span></div>`;
-        }
-    });
-
-    daftarAddon.forEach(item => {
-        const chk = document.getElementById(`chk_add_${item.id}`).checked;
-        const qty = parseInt(document.getElementById(`qty_add_${item.id}`).value) || 1;
-        if(chk){
-            let sub = item.price * qty;
-            currentGrandTotal += sub;
-            sidebarAddonHTML += `<div class="summary-row item-line"><span>${qty}x ${item.name}</span><span>${formatRupiah(sub)}</span></div>`;
-            addonOrderHTML += `<div class="r-row"><span>${qty}x ${item.name}</span><span>${formatRupiah(sub)}</span></div>`;
-        }
-    });
-
-    let finalHTML = "";
-    if(sidebarPaketHTML) finalHTML += `<div style="font-weight:bold; margin-bottom:4px;">Paket:</div>` + sidebarPaketHTML;
-    if(sidebarAddonHTML) finalHTML += `<div style="font-weight:bold; margin-top:8px; margin-bottom:4px;">Ekstra:</div>` + sidebarAddonHTML;
-
-    if(!finalHTML) finalHTML = `<div style="color: var(--text-muted); font-size: 0.9rem;">Belum ada item dipilih.</div>`;
-
-    if(!isInvoice) {
-        document.getElementById("sumItemsContainer").innerHTML = finalHTML;
-        document.getElementById("grandTotalDisplay").innerText = formatRupiah(currentGrandTotal);
-    } else {
-        document.getElementById("invPaketArea").innerHTML = paketOrderHTML || "<i>Tidak ada paket</i>";
-        if(addonOrderHTML) {
-            document.getElementById("invAddonSection").classList.remove("hidden");
-            document.getElementById("invAddonArea").innerHTML = addonOrderHTML;
-        } else {
-            document.getElementById("invAddonSection").classList.add("hidden");
-        }
-    }
-}
-
-function submitFinalDanPreviewInvoice(){
-    const btnSubmit = document.querySelector("#btnFinalSubmit");
-    btnSubmit.disabled = true; 
-    btnSubmit.innerText = "⏳ Sedang Menyimpan Data...";
-
-    const payMethodSelected = document.querySelector('input[name="payType"]:checked').value;
-    let labelMetodePembayaranFinal = payMethodSelected;
-    if(payMethodSelected === "DP Bebas") {
-        let nilaiDPAngka = document.getElementById("customDpAmount").value;
-        labelMetodePembayaranFinal = `DP via QRIS (${formatRupiah(nilaiDPAngka)})`;
-    }
-
-    let dbPaket = []; let dbAddon = [];
-    daftarPaket.forEach(p => { if(document.getElementById(`chk_pkt_${p.id}`).checked) dbPaket.push(`1x ${p.name}`); });
-    daftarAddon.forEach(a => { if(document.getElementById(`chk_add_${a.id}`).checked) dbAddon.push(`${document.getElementById(`qty_add_${a.id}`).value}x ${a.name}`); });
-
-    let stringItemDB = "";
-    if(dbPaket.length > 0) stringItemDB += "[Paket] " + dbPaket.join(", ");
-    if(dbAddon.length > 0) stringItemDB += (stringItemDB ? " | " : "") + "[Ekstra] " + dbAddon.join(", ");
-
-    const payload = {
-        nama: document.getElementById("custName").value,
-        hp: "+62" + document.getElementById("custPhone").value.replace(/^0+/, ''),
-        tanggal: selectedDate,
-        slot: selectedSlotsArray.join(", "),
-        pesanan: stringItemDB,
-        total: currentGrandTotal,
-        metode: labelMetodePembayaranFinal,
-        catatan: document.getElementById("custMessage").value,
-        trxId: currentTrxId,
-        file_base64: base64File,
-        file_mime: mimeType
+    const selfPackageData = {
+        "SOLO / SQUAD": [
+            { tier: "BASIC", maxPax: 3, price: 50000 },
+            { tier: "PLUS", maxPax: 3, price: 59000 },
+            { tier: "PREMIUM", maxPax: 3, price: 66000 }
+        ],
+        "MID CIRCLE": [
+            { tier: "BASIC", maxPax: 7, price: 90000 },
+            { tier: "PLUS", maxPax: 7, price: 117000 },
+            { tier: "PREMIUM", maxPax: 7, price: 138000 }
+        ],
+        "PARTY GROUP": [
+            { tier: "BASIC", maxPax: 12, price: 125000 },
+            { tier: "PLUS", maxPax: 12, price: 174500 },
+            { tier: "PREMIUM", maxPax: 12, price: 213000 }
+        ],
+        "PARTY GROUP >12": [
+            { tier: "BASIC", maxPax: 13, price: 140000 }, { tier: "PLUS", maxPax: 13, price: 194000 }, { tier: "PREMIUM", maxPax: 13, price: 236000 },
+            { tier: "BASIC", maxPax: 14, price: 155000 }, { tier: "PLUS", maxPax: 14, price: 213500 }, { tier: "PREMIUM", maxPax: 14, price: 259000 },
+            { tier: "BASIC", maxPax: 15, price: 170000 }, { tier: "PLUS", maxPax: 15, price: 233000 }, { tier: "PREMIUM", maxPax: 15, price: 282000 },
+            { tier: "BASIC", maxPax: 16, price: 185000 }, { tier: "PLUS", maxPax: 16, price: 252500 }, { tier: "PREMIUM", maxPax: 16, price: 305000 },
+            { tier: "BASIC", maxPax: 17, price: 200000 }, { tier: "PLUS", maxPax: 17, price: 272000 }, { tier: "PREMIUM", maxPax: 17, price: 328000 },
+            { tier: "BASIC", maxPax: 18, price: 215000 }, { tier: "PLUS", maxPax: 18, price: 291500 }, { tier: "PREMIUM", maxPax: 18, price: 351000 },
+            { tier: "BASIC", maxPax: 19, price: 230000 }, { tier: "PLUS", maxPax: 19, price: 311000 }, { tier: "PREMIUM", maxPax: 19, price: 374000 },
+            { tier: "BASIC", maxPax: 20, price: 245000 }, { tier: "PLUS", maxPax: 20, price: 330500 }, { tier: "PREMIUM", maxPax: 20, price: 397000 },
+            { tier: "BASIC", maxPax: 21, price: 260000 }, { tier: "PLUS", maxPax: 21, price: 350000 }, { tier: "PREMIUM", maxPax: 21, price: 420000 },
+            { tier: "BASIC", maxPax: 22, price: 275000 }, { tier: "PLUS", maxPax: 22, price: 369500 }, { tier: "PREMIUM", maxPax: 22, price: 443000 },
+            { tier: "BASIC", maxPax: 23, price: 290000 }, { tier: "PLUS", maxPax: 23, price: 389000 }, { tier: "PREMIUM", maxPax: 23, price: 466000 },
+            { tier: "BASIC", maxPax: 24, price: 305000 }, { tier: "PLUS", maxPax: 24, price: 408500 }, { tier: "PREMIUM", maxPax: 24, price: 489000 },
+            { tier: "BASIC", maxPax: 25, price: 320000 }, { tier: "PLUS", maxPax: 25, price: 428000 }, { tier: "PREMIUM", maxPax: 25, price: 512000 }
+        ]
     };
 
-    fetch(SCRIPT_URL, {
-        method: "POST", 
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-    })
-    .then(res => res.json())
-    .then(res => {
-        tampilkanStrukAkhir(payMethodSelected);
-    })
-    .catch(err => {
-        console.error(err);
-        tampilkanStrukAkhir(payMethodSelected);
+    const daftarAddon = [
+        {id:"a1",name:"SPOTLIGHT",price:25000},
+        {id:"a2",name:"PERSONIL",price:15000},
+        {id:"a3",name:"DURASI (5 MNT)",price:10000},
+        {id:"a4",name:"CETAK 4R",price:10000},
+        {id:"a5",name:"COSTUME ANIMAL",price:10000},
+        {id:"a6",name:"PENGARAH GAYA",price:20000},
+        {id:"a7",name:"KEYCHAIN",price:10000},
+        {id:"a9",name:"PIGURA 10RS",price:70000},
+        {id:"a10",name:"PIGURA 4R",price:25000}
+    ];
+
+    let selectedDate = "", selectedSlotsArray = [], currentGrandTotal = 0;
+    let globalBookedData = {}; let currentTrxId = ""; 
+    let base64File = ""; let mimeType = "";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const inputBukti = document.getElementById('buktiTransfer');
+        if (inputBukti) {
+            inputBukti.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert("Ukuran file terlalu besar! Maksimal 2MB ya kak.");
+                        this.value = "";
+                        base64File = ""; mimeType = "";
+                        return;
+                    }
+                    mimeType = file.type;
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        base64File = event.target.result.split(',')[1]; 
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    base64File = ""; mimeType = "";
+                }
+            });
+        }
     });
-}
 
-function tampilkanStrukAkhir(payType) {
-    hideSteps(); document.getElementById("mainHeader").classList.add("hidden");
-    document.getElementById("step4").classList.remove("hidden");
+    function formatRupiah(a){ return "Rp "+parseInt(a).toLocaleString('id-ID'); }
 
-    document.getElementById("invTrxId").innerText = currentTrxId;
-    document.getElementById("invName").innerText = document.getElementById("custName").value;
-    document.getElementById("invPhone").innerText = "+62" + document.getElementById("custPhone").value.replace(/^0+/, '');
-    document.getElementById("invDate").innerText = document.getElementById("sumDate").innerText;
-    document.getElementById("invSlots").innerText = document.getElementById("sumSlots").innerText;
-
-    updateSummary(true); 
-    document.getElementById("invGrandTotal").innerText = formatRupiah(currentGrandTotal);
-
-    let labelMetode = "";
-    if (payType === "Bayar di Tempat") {
-        labelMetode = "Akan Bayar Cash di Kasir";
-    } else if (payType === "Pelunasan QRIS") {
-        labelMetode = "Sudah Lunas (QRIS)";
-    } else {
-        labelMetode = "Sudah Masuk DP (QRIS)";
+    function generateTrxId() {
+        const d = new Date();
+        const yy = String(d.getFullYear()).slice(-2);
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase();
+        return `PTK-${yy}${mm}${dd}-${randomStr}`;
     }
 
-    document.getElementById("labelMetodeBayar").innerText = labelMetode;
-    document.getElementById("invDpAmount").innerText = (payType === "Bayar di Tempat") ? "Rp 0" : (payType === "Pelunasan QRIS" ? formatRupiah(currentGrandTotal) : formatRupiah(document.getElementById("customDpAmount").value));
+    function formatTanggalIndo(dateStr) {
+        const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+        const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        const d = new Date(dateStr);
+        return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    }
 
-    window.scrollTo(0,0);
-}
+    function fetchBookedSlots() {
+        const loader = document.getElementById("loadingSlots");
+        const bDate = document.getElementById("bookingDate");
+        const bWrapper = document.getElementById("dateInputWrapper");
 
-function bukaWhatsAppDanMintaResi() {
-    let pName = document.getElementById("custName").value;
-    let tglDisplay = document.getElementById("sumDate").innerText;
-    let note = document.getElementById("custMessage").value.trim();
-    const payType = document.querySelector('input[name="payType"]:checked').value;
-    let jamSesiAwal = document.getElementById("sumSlots").innerText;
+        loader.classList.remove("hidden");
+        bDate.disabled = true; bWrapper.style.opacity = "0.4"; bWrapper.style.pointerEvents = "none";
+        
+        fetch(SCRIPT_URL + "?t=" + new Date().getTime())
+        .then(res => res.json())
+        .then(data => {
+            globalBookedData = data;
+            loader.classList.add("hidden");
+            bDate.disabled = false; bWrapper.style.opacity = "1"; bWrapper.style.pointerEvents = "auto";
+            if(selectedDate) renderSlots(selectedDate, selectedDate);
+        })
+        .catch(() => {
+            loader.innerText = "⚠️ Gagal memuat jadwal harian server.";
+            loader.style.color = "var(--error-color)";
+        });
+    }
 
-    let msg = `Halo Min! Aku mau konfirmasi booking sesi foto nih. Catat yaa:\n\n`;
-    msg += `- ID Transaksi: *${currentTrxId}*\n`;
-    msg += `- Nama: *${pName}*\n`;
-    msg += `- Tanggal: *${tglDisplay}*\n`;
-    msg += `- Jam: *${jamSesiAwal}*\n`;
-    if(note) msg += `- Catatan: ${note}\n`;
-    msg += `\nTotal Tagihan: *${formatRupiah(currentGrandTotal)}*\n`;
+    function handleDateChange(){
+        selectedDate = document.getElementById("bookingDate").value;
+        if(selectedDate){
+            document.getElementById("fakeDate").value = formatTanggalIndo(selectedDate);
+            document.getElementById("timeSelectionArea").classList.remove("hidden");
+            renderSlots(selectedDate, selectedDate);
+        } else {
+            document.getElementById("timeSelectionArea").classList.add("hidden");
+            document.getElementById("fakeDate").value = "";
+            document.getElementById("btnNext").disabled = true;
+        }
+    }
+
+    function renderSlots(dStr, keyTanggal){
+        const container = document.getElementById("slotsContainer");
+        container.innerHTML = ""; selectedSlotsArray = [];
+        document.getElementById("btnNext").disabled = true;
+        
+        const now = new Date(), sel = new Date(dStr), isToday = sel.toDateString() === now.toDateString();
+        let lakuDiTanggalIni = globalBookedData[keyTanggal] || {};
+
+        timeSlots.forEach(s => {
+            let [h, m] = s.split('.').map(Number);
+            let jamAkhir = h, menitAkhir = m + 15;
+            if(menitAkhir >= 60) { jamAkhir += 1; menitAkhir -= 60; }
+            const fullTextSlot = `${s} - ${String(jamAkhir).padStart(2, '0')}.${String(menitAkhir).padStart(2, '0')}`; 
+            
+            const btn = document.createElement("button");
+            btn.className = "slot-btn"; btn.innerText = s;
+            
+            let isPast = isToday && (h < now.getHours() || (h === now.getHours() && m <= now.getMinutes()));
+            let isAlreadyBooked = lakuDiTanggalIni[fullTextSlot] !== undefined;
+
+            if(isPast || isAlreadyBooked) {
+                btn.disabled = true; 
+                if(isAlreadyBooked && lakuDiTanggalIni[fullTextSlot].status === "BLOKIR") {
+                    btn.innerText = "TUTUP";
+                    btn.style.color = "#ff5252";
+                }
+            } else {
+                btn.onclick = () => {
+                    if(selectedSlotsArray.includes(fullTextSlot)){ 
+                        selectedSlotsArray = []; btn.classList.remove("active"); 
+                    } else { 
+                        document.querySelectorAll('.slot-btn.active').forEach(el => el.classList.remove('active'));
+                        selectedSlotsArray = [fullTextSlot]; btn.classList.add("active"); 
+                    }
+                    document.getElementById("btnNext").disabled = selectedSlotsArray.length === 0;
+                };
+            }
+            container.appendChild(btn);
+        });
+    }
+
+    function goToStep1(){ hideSteps(); document.getElementById("step1").classList.remove("hidden"); }
+    function goToStep2(){ 
+        hideSteps(); document.getElementById("step2").classList.remove("hidden");
+        document.getElementById("sumDate").innerText = formatTanggalIndo(selectedDate);
+        
+        let jamAwals = selectedSlotsArray.map(slot => slot.split(" - ")[0]);
+        document.getElementById("sumSlots").innerHTML = jamAwals.join(", ");
+        
+        updateSummary(); window.scrollTo(0,0);
+    }
+
+    function goToStep3(){
+        if(!document.getElementById("custName").value || !document.getElementById("custPhone").value){ 
+            alert("Isi nama dan nomer WA dulu bro!"); return; 
+        }
+        
+        let cat = document.getElementById("paketCategorySelect").value;
+        let adaPaket = false;
+        if(cat === "formal") {
+            adaPaket = document.querySelector('input[name="paketFormal"]:checked');
+        } else {
+            adaPaket = document.getElementById("selfTierSelect").value;
+        }
+
+        if(!adaPaket){ alert(`Silakan pilih salah satu Paket Utama studio dulu kak!`); return; }
+
+        currentTrxId = generateTrxId();
+        hideSteps(); document.getElementById("step3").classList.remove("hidden");
+
+        document.getElementById("sumDatePay").innerText = document.getElementById("sumDate").innerText;
+        document.getElementById("sumSlotsPay").innerHTML = document.getElementById("sumSlots").innerHTML;
+        document.getElementById("sumItemsContainerPay").innerHTML = document.getElementById("sumItemsContainer").innerHTML;
+        document.getElementById("grandTotalDisplayPay").innerText = document.getElementById("grandTotalDisplay").innerText;
+
+        handlePaymentMethodChange(); window.scrollTo(0,0);
+    }
+
+    function handlePaymentMethodChange() {
+        const payType = document.querySelector('input[name="payType"]:checked').value;
+        const qrisBox = document.getElementById("qrisContainer");
+        const qrisResult = document.getElementById("qrisResultArea");
+        const dpWrapper = document.getElementById("customDpWrapper");
+        const uploadWrapper = document.getElementById("uploadResiWrapper");
+
+        if (payType === "Bayar di Tempat") {
+            qrisBox.classList.add("hidden"); qrisResult.classList.add("hidden");
+            dpWrapper.classList.add("hidden");
+            uploadWrapper.classList.add("hidden");
+        } else if (payType === "Pelunasan QRIS") {
+            qrisBox.classList.remove("hidden"); qrisResult.classList.remove("hidden"); 
+            dpWrapper.classList.add("hidden");
+            uploadWrapper.classList.remove("hidden");
+            document.getElementById("qrisDisplayAmount").innerText = formatRupiah(currentGrandTotal);
+            document.getElementById("qrisImg").src = "qris.jpg";
+        } else if (payType === "DP Bebas") {
+            qrisBox.classList.remove("hidden"); qrisResult.classList.add("hidden"); 
+            dpWrapper.classList.remove("hidden");
+            uploadWrapper.classList.remove("hidden");
+        }
+    }
+
+    function generateQrisClick() {
+        let nominalDP = parseInt(document.getElementById("customDpAmount").value) || 0;
+        if(nominalDP < 1) { alert("Ketik nominal uangnya dulu kak!"); return; }
+        document.getElementById("qrisResultArea").classList.remove("hidden");
+        document.getElementById("qrisDisplayAmount").innerText = formatRupiah(nominalDP);
+        document.getElementById("qrisImg").src = "qris.jpg";
+    }
+
+    function handleCategoryChange() {
+        const cat = document.getElementById("paketCategorySelect").value;
+        const formalCont = document.getElementById("formalPackageContainer");
+        const selfCont = document.getElementById("selfPackageContainer");
+
+        if(cat === "formal") {
+            formalCont.classList.remove("hidden");
+            selfCont.classList.add("hidden");
+        } else {
+            formalCont.classList.add("hidden");
+            selfCont.classList.remove("hidden");
+            updateSelfPackageOptions();
+        }
+        updateSummary();
+    }
+
+    function updateSelfPackageOptions() {
+        const typeSelect = document.getElementById("selfTypeSelect").value;
+        const tierSelect = document.getElementById("selfTierSelect");
+        tierSelect.innerHTML = "";
+
+        const listOptions = selfPackageData[typeSelect] || [];
+        listOptions.forEach((opt, idx) => {
+            const el = document.createElement("option");
+            el.value = idx;
+            el.text = `${opt.tier} (Kapasitas: ${opt.maxPax} Orang) - ${formatRupiah(opt.price)}`;
+            tierSelect.appendChild(el);
+        });
+        updateSummary();
+    }
+
+    function updateSummary(isInvoice = false){
+        currentGrandTotal = 0; let paketOrderHTML = ""; let addonOrderHTML = "";
+        let sidebarPaketHTML = ""; let sidebarAddonHTML = "";
+
+        const cat = document.getElementById("paketCategorySelect").value;
+        if(cat === "formal") {
+            daftarFormal.forEach(item => {
+                const chk = document.getElementById(`chk_pkt_${item.id}`);
+                if(chk && chk.checked){
+                    currentGrandTotal += item.price;
+                    sidebarPaketHTML += `<div class="summary-row item-line"><span>• ${item.name}</span><span>${formatRupiah(item.price)}</span></div>`;
+                    paketOrderHTML += `<div class="r-row"><span>1x ${item.name}</span> <span>${formatRupiah(item.price)}</span></div>`;
+                }
+            });
+        } else {
+            const typeSelect = document.getElementById("selfTypeSelect").value;
+            const idx = document.getElementById("selfTierSelect").value;
+            if(idx !== "") {
+                const selectedOpt = selfPackageData[typeSelect][idx];
+                if(selectedOpt) {
+                    currentGrandTotal += selectedOpt.price;
+                    let itemName = `Self Photo: ${typeSelect} - ${selectedOpt.tier} (${selectedOpt.maxPax} Org)`;
+                    sidebarPaketHTML += `<div class="summary-row item-line"><span>• ${itemName}</span><span>${formatRupiah(selectedOpt.price)}</span></div>`;
+                    paketOrderHTML += `<div class="r-row"><span>1x ${itemName}</span> <span>${formatRupiah(selectedOpt.price)}</span></div>`;
+                }
+            }
+        }
+
+        daftarAddon.forEach(item => {
+            const chk = document.getElementById(`chk_add_${item.id}`).checked;
+            const qty = parseInt(document.getElementById(`qty_add_${item.id}`).value) || 1;
+            if(chk){
+                const tot = item.price * qty; currentGrandTotal += tot;
+                sidebarAddonHTML += `<div class="summary-row item-line"><span>• ${item.name} (x${qty})</span><span>${formatRupiah(tot)}</span></div>`;
+                addonOrderHTML += `<div class="r-row"><span>${qty}x ${item.name}</span> <span>${formatRupiah(tot)}</span></div>`;
+            }
+        });
+        
+        if(!isInvoice){
+            let finalSidebar = "";
+            if(sidebarPaketHTML) finalSidebar += `<div style="font-size:0.85rem; font-weight:bold; color:var(--accent-color); margin-bottom:4px; margin-top:5px;">Paket Utama:</div>` + sidebarPaketHTML;
+            if(sidebarAddonHTML) finalSidebar += `<div style="font-size:0.85rem; font-weight:bold; color:var(--accent-color); margin-top:12px; margin-bottom:4px;">Ekstra (Add-On):</div>` + sidebarAddonHTML;
+            document.getElementById("sumItemsContainer").innerHTML = finalSidebar || "<p style='text-align:center;font-size:0.8rem'>Belum ada item</p>";
+            document.getElementById("grandTotalDisplay").innerText = formatRupiah(currentGrandTotal);
+            document.getElementById("sumItemsContainerPay").innerHTML = finalSidebar || "<p style='text-align:center;font-size:0.8rem'>Belum ada item</p>";
+            document.getElementById("grandTotalDisplayPay").innerText = formatRupiah(currentGrandTotal);
+        } else {
+            document.getElementById("invPaketArea").innerHTML = paketOrderHTML;
+            document.getElementById("invAddonArea").innerHTML = addonOrderHTML;
+            document.getElementById("invAddonSection").classList.toggle("hidden", addonOrderHTML === "");
+        }
+    }
+
+    function submitFinalDanPreviewInvoice(){
+        const btnSubmit = document.querySelector("#btnFinalSubmit");
+        btnSubmit.disabled = true; 
+        btnSubmit.innerText = "⏳ Sedang Menyimpan Data...";
+
+        const payMethodSelected = document.querySelector('input[name="payType"]:checked').value;
+        let labelMetodePembayaranFinal = payMethodSelected;
+        if(payMethodSelected === "DP Bebas") {
+            let nilaiDPAngka = document.getElementById("customDpAmount").value;
+            labelMetodePembayaranFinal = `DP via QRIS (${formatRupiah(nilaiDPAngka)})`;
+        }
+
+        let dbPaket = []; let dbAddon = [];
+        
+        const cat = document.getElementById("paketCategorySelect").value;
+        if(cat === "formal") {
+            daftarFormal.forEach(p => { 
+                const el = document.getElementById(`chk_pkt_${p.id}`);
+                if(el && el.checked) dbPaket.push(`1x ${p.name}`); 
+            });
+        } else {
+            const typeSelect = document.getElementById("selfTypeSelect").value;
+            const idx = document.getElementById("selfTierSelect").value;
+            if(idx !== "") {
+                const selectedOpt = selfPackageData[typeSelect][idx];
+                if(selectedOpt) {
+                    dbPaket.push(`1x Self Photo: ${typeSelect} - ${selectedOpt.tier} (${selectedOpt.maxPax} Org)`);
+                }
+            }
+        }
+
+        daftarAddon.forEach(a => { if(document.getElementById(`chk_add_${a.id}`).checked) dbAddon.push(`${document.getElementById(`qty_add_${a.id}`).value}x ${a.name}`); });
+
+        let stringItemDB = "";
+        if(dbPaket.length > 0) stringItemDB += "[Paket] " + dbPaket.join(", ");
+        if(dbAddon.length > 0) stringItemDB += (stringItemDB ? " | " : "") + "[Ekstra] " + dbAddon.join(", ");
+
+        const payload = {
+            nama: document.getElementById("custName").value,
+            email: document.getElementById("custEmail").value,
+            hp: "+62" + document.getElementById("custPhone").value.replace(/^0+/, ''),
+            tanggal: selectedDate, 
+            sesi: selectedSlotsArray.join(", "),
+            item: stringItemDB,
+            total: formatRupiah(currentGrandTotal),
+            metode_bayar: labelMetodePembayaranFinal,
+            pay_type_raw: payMethodSelected, 
+            catatan: document.getElementById("custMessage").value.trim() || "-",
+            id_transaksi: currentTrxId,
+            file_base64: base64File, 
+            file_mime: mimeType
+        };
+
+        fetch(SCRIPT_URL, {
+            method: "POST", 
+            mode: "no-cors", 
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload)
+        }).then(() => { 
+            tampilkanStrukAkhir(payMethodSelected); 
+        }).catch(() => { 
+            tampilkanStrukAkhir(payMethodSelected); 
+        });
+    }
+
+    function tampilkanStrukAkhir(payType) {
+        hideSteps(); document.getElementById("mainHeader").classList.add("hidden");
+        document.getElementById("step4").classList.remove("hidden");
+        
+        document.getElementById("invTrxId").innerText = "ID: " + currentTrxId; 
+        document.getElementById("invName").innerText = document.getElementById("custName").value;
+        let phoneInput = document.getElementById("custPhone").value.replace(/^0+/, '');
+        document.getElementById("invPhone").innerText = "+62" + phoneInput;
+        document.getElementById("invBookDate").innerText = document.getElementById("sumDate").innerText;
+        document.getElementById("invSlots").innerHTML = document.getElementById("sumSlots").innerHTML;
+        
+        updateSummary(true); 
+        document.getElementById("invGrandTotal").innerText = formatRupiah(currentGrandTotal);
+
+        let labelMetode = "";
+        if (payType === "Bayar di Tempat") {
+            labelMetode = "Akan Bayar Cash di Kasir";
+        } else if (payType === "Pelunasan QRIS") {
+            labelMetode = "Sudah Dibayar Lunas (QRIS)";
+        } else {
+            labelMetode = "Sudah Masuk DP (QRIS)";
+        }
+
+        document.getElementById("labelMetodeBayar").innerText = labelMetode;
+        document.getElementById("invDpAmount").innerText = (payType === "Bayar di Tempat") ? "Rp 0" : (payType === "Pelunasan QRIS" ? formatRupiah(currentGrandTotal) : formatRupiah(document.getElementById("customDpAmount").value));
+
+        window.scrollTo(0,0);
+    }
+
+    function bukaWhatsAppDanMintaResi() {
+        let pName = document.getElementById("custName").value;
+        let tglDisplay = document.getElementById("sumDate").innerText;
+        let note = document.getElementById("custMessage").value.trim();
+        const payType = document.querySelector('input[name="payType"]:checked').value;
+        let jamSesiAwal = document.getElementById("sumSlots").innerText;
+
+        let msg = `Halo Min! Aku mau konfirmasi booking sesi foto nih. Catat yaa:\n\n`;
+        msg += `- ID Transaksi: *${currentTrxId}*\n`;
+        msg += `- Nama: *${pName}*\n`;
+        msg += `- Tanggal: *${tglDisplay}*\n`;
+        msg += `- Sesi: *${jamSesiAwal}*\n\n`;
+        if(note) msg += `Catatan: _${note}_\n\n`;
+        
+        if(payType !== "Bayar di Tempat") {
+            msg += `*Berikut aku lampirin juga foto bukti resi transfernya ya Min!* 👇📸`;
+        } else {
+            msg += `Nanti aku bayar cash langsung di studio ya Min! ✨`;
+        }
+
+        window.open(`https://api.whatsapp.com/send?phone=6281338380100&text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function downloadInvoiceGambar() {
+        const btn = document.getElementById("btnDownload");
+        btn.innerText = "Memproses Gambar...";
+        
+        html2canvas(document.querySelector("#invoiceArea"), {scale: 2}).then(canvas => {
+            let a = document.createElement('a');
+            a.href = canvas.toDataURL("image/jpeg", 0.9);
+            a.download = `Invoice_Potokene_${currentTrxId}.jpg`;
+            a.click();
+            btn.innerHTML = `✅ Gambar Tersimpan!`;
+            setTimeout(() => { 
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg> Download Gambar Invoice Lagi`; 
+            }, 3000);
+        });
+    }
+
+    function hideSteps(){ ["step1","step2","step3","step4"].forEach(s => document.getElementById(s).classList.add("hidden")); }
     
-    if(payType !== "Bayar di Tempat") {
-        msg += `Metode: *${payType}*\n`;
-        msg += `Bukti transfer/QRIS sudah aku kirim/upload ya Min! Mohon bantu konfirmasi jadwal sesinya ya. Terima kasih! ✨`;
-    } else {
-        msg += `Nanti aku bayar cash langsung di studio ya Min! ✨`;
+    function renderFormalTable(){
+        const b = document.querySelector(`#formalPaketTable tbody`);
+        b.innerHTML = "";
+        daftarFormal.forEach(i => {
+            const r = document.createElement("tr");
+            r.innerHTML = `<td><label class="checkbox-container"><input type="radio" name="paketFormal" id="chk_pkt_${i.id}" onchange="updateSummary()"><span class="item-name">${i.name}<br><small>${formatRupiah(i.price)}</small></span></label></td>`;
+            b.appendChild(r);
+        });
     }
 
-    window.open(`https://api.whatsapp.com/send?phone=6281338380100&text=${encodeURIComponent(msg)}`, '_blank');
-}
+    function renderAddonTable(){
+        const b = document.querySelector(`#addonTable tbody`);
+        b.innerHTML = "";
+        daftarAddon.forEach(i => {
+            const r = document.createElement("tr");
+            r.innerHTML = `<td><label class="checkbox-container"><input type="checkbox" id="chk_add_${i.id}" onchange="toggleItem('add','${i.id}')"><span class="item-name">${i.name}<br><small>${formatRupiah(i.price)}</small></span></label></td>
+            <td style="text-align:center"><input type="number" id="qty_add_${i.id}" class="qty-input" value="1" min="1" disabled oninput="updateSummary()"></td>`;
+            b.appendChild(r);
+        });
+    }
 
-function downloadInvoiceGambar() {
-    const btn = document.getElementById("btnDownload");
-    btn.innerText = "Memproses Gambar...";
-    const invoiceElement = document.getElementById("invoiceArea");
+    function toggleItem(p, id){ 
+        const c = document.getElementById(`chk_${p}_${id}`); 
+        const q = document.getElementById(`qty_${p}_${id}`); 
+        q.disabled = !c.checked;
+        if(!c.checked) q.value = 1;
+        updateSummary(); 
+    }
 
-    html2canvas(invoiceElement, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = `Invoice-${currentTrxId}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-        btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg> Download Invoice (Gambar)`;
-    });
-}
-
-function downloadGambarQris() {
-    const link = document.createElement('a');
-    link.href = document.getElementById("qrisImg").src; 
-    link.download = 'QRIS_Potokene.jpeg'; 
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-function hideSteps(){ ["step1","step2","step3","step4"].forEach(s => document.getElementById(s).classList.add("hidden")); }
-
-function renderTable(tableId, dataArray, typePrefix) {
-    const tbody = document.getElementById(tableId);
-    tbody.innerHTML = "";
-    dataArray.forEach(item => {
-        let tr = document.createElement("tr");
-        let inputType = (typePrefix === "pkt") ? "radio" : "checkbox";
-        let qtyControl = (typePrefix === "add") ? `<input type="number" id="qty_add_${item.id}" class="qty-input" value="1" min="1" disabled onchange="updateSummary()">` : "";
-
-        tr.innerHTML = `
-            <td>
-                <label class="checkbox-container">
-                    <input type="${inputType}" name="${typePrefix === 'pkt' ? 'paketUtama' : 'addonItem'}" id="chk_${typePrefix}_${item.id}" onchange="toggleItem('${typePrefix}', '${item.id}')">
-                    <span>${item.name}</span>
-                </label>
-            </td>
-            <td style="text-align: right; width: 120px; font-weight: bold;">${formatRupiah(item.price)}</td>
-            <td style="text-align: center; width: 60px;">${qtyControl}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
-
-function toggleItem(p, id){ 
-    const c = document.getElementById(`chk_${p}_${id}`); 
-    const q = document.getElementById(`qty_${p}_${id}`); 
-    if(q) q.disabled = !c.checked; 
-    updateSummary(); 
-}
-
-window.onload = () => {
-    const t = new Date(); document.getElementById("bookingDate").setAttribute("min", t.toISOString().split('T')[0]);
-    renderTable("paketTable", daftarPaket, "pkt"); 
-    renderTable("addonTable", daftarAddon, "add");
-    fetchBookedSlots();
-};
+    window.onload = () => {
+        const t = new Date(); document.getElementById("bookingDate").setAttribute("min", t.toISOString().split('T')[0]);
+        renderFormalTable(); 
+        renderAddonTable();
+        handleCategoryChange();
+        fetchBookedSlots();
+    };
 </script>
-
 </body>
 </html>
